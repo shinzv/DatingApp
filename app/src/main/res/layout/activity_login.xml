@@ -10,31 +10,33 @@
 
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/Benutzer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="257dp"
+        android:drawableRight="@drawable/person"
+        android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="E-mail"
-        android:drawableRight="@drawable/person"
         android:inputType="textEmailAddress"
         android:textColorHint="#FFDFE6E9" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/Passwort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/editText"
+        android:layout_alignStart="@+id/Benutzer"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="184dp"
+        android:drawableRight="@drawable/lock"
+        android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="Passwort"
-        android:textColorHint="#FFDFE6E9"
-        android:drawableRight="@drawable/lock"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColorHint="#FFDFE6E9" />
 
     <android.support.v7.widget.CardView
         android:layout_width="150dp"
