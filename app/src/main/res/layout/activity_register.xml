@@ -14,4 +14,5 @@
         android:text="Register"
         tools:layout_editor_absoluteX="179dp"
         tools:layout_editor_absoluteY="320dp" />
+
 </RelativeLayout>
