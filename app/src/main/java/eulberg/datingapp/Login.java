@@ -64,8 +64,6 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void signIn(String email, String password){
@@ -74,19 +72,18 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success
-                            Log.d(TAG, "sign in successful");
+                            // Sign in erfolgreich
+                            Log.d(TAG, "sign in erfolgreich");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(Login.this,Home.class);
                             startActivity(intent);
                         } else {
-                            //Sign in fails
-                            Log.w(TAG, "sign in failed", task.getException());
+                            //Sign in fehlgeschlagen
+                            Log.w(TAG, "sign in fehlgeschlagen", task.getException());
                             Toast.makeText(Login.this, "Anmeldung fehlgeschlagen",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-
 }
