@@ -47,11 +47,12 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn(email.getText().toString(),password.getText().toString());
-                /*
-                Intent intent = new Intent(Login.this,Home.class);
-                startActivity(intent);
-                */
+                if(!email.getText().toString().equals("") && !password.getText().toString().equals("")) {
+                    signIn(email.getText().toString(), password.getText().toString());
+                }else{
+                    Log.d(TAG, "Es sind nicht alle Felder ausgefüllt");
+                    Toast.makeText(Login.this, "Alle Felder müssen gefüllt sein", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -80,8 +81,7 @@ public class Login extends AppCompatActivity {
                         } else {
                             //Sign in fehlgeschlagen
                             Log.w(TAG, "sign in fehlgeschlagen", task.getException());
-                            Toast.makeText(Login.this, "Anmeldung fehlgeschlagen",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Anmeldung fehlgeschlagen", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

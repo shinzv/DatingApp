@@ -15,12 +15,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="135dp"
+        android:layout_marginTop="91dp"
         android:text="Registrierung"
         android:textColor="#FFDFE6E9"
-        android:textSize="28dp"
+        android:textSize="26dp"
         tools:layout_editor_absoluteX="179dp"
         tools:layout_editor_absoluteY="320dp" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="254dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="161dp"
+        android:backgroundTint="@color/colorAccent"
+        android:drawableRight="@drawable/person"
+        android:ems="10"
+        android:hint="Nutzername"
+        android:inputType="textEmailAddress"
+        android:textColor="#FFDFE6E9"
+        android:textColorHint="#FFDFE6E9" />
 
     <EditText
         android:id="@+id/user"
@@ -58,9 +73,9 @@
         android:layout_width="254dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/user"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="228dp"
+        android:layout_marginTop="386dp"
         android:backgroundTint="@color/colorAccent"
         android:drawableRight="@drawable/lock"
         android:ems="10"
