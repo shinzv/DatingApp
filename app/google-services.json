@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1041430719884",
+    "firebase_url": "https://datingapp-65363.firebaseio.com",
+    "project_id": "datingapp-65363",
+    "storage_bucket": "datingapp-65363.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041430719884:android:f186ca6af4338ff6",
+        "android_client_info": {
+          "package_name": "eulberg.datingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041430719884-ofqr9ic51lkjep59vs8dngu311mg2net.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eulberg.datingapp",
+            "certificate_hash": "52d65a8e9aba24e3ce4dcc0527e99e401dc04bdb"
+          }
+        },
+        {
+          "client_id": "1041430719884-e23h7mv2obn37v7ne1be75a7vl39aj3b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6RnHOauNf9FnJGdAws0WAF0JG4IXHZ5U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041430719884-e23h7mv2obn37v7ne1be75a7vl39aj3b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
