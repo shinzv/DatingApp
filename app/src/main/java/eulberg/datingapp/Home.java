@@ -18,6 +18,8 @@ public class Home extends AppCompatActivity {
         nav.setOnNavigationItemSelectedListener(navListener);
         //Default fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscoverFragment()).commit();
+
+
     }
 
     //Wechsel der Fragmente
