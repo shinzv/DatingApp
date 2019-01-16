@@ -60,9 +60,20 @@ public class Register extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Alle Felder müssen befüllt sein
                 if(!password2.getText().equals("") || !password.getText().equals("") || !username.getText().equals("") || !email.getText().equals("")) {
+                    //Passwort Überprüfungen
                     if (password.getText().toString().equals(password2.getText().toString())) {
-                        signUp(email.getText().toString(), password.getText().toString());
+                        if(password.getText().toString().matches(".*\\d+.*")) {
+                            //E-Mail Überprüfungen
+                            if(email.getText().toString().contains("@") && email.getText().toString().split("@")[1].contains(".")){
+                                signUp(email.getText().toString(), password.getText().toString());
+                            }else {
+                                Toast.makeText(Register.this, "Gib bitte eine gültige E-Mail Adresse an", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(Register.this, "Passwort muss mindestens eine Ziffer enthalten", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(Register.this, "Passwörter stimmen nicht überein", Toast.LENGTH_SHORT).show();
                     }
