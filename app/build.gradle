@@ -34,6 +34,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-database:16.0.5'
 
+    //Round Images
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
 }
 //Firebase
 apply plugin: 'com.google.gms.google-services'

@@ -1,5 +1,6 @@
 package eulberg.datingapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,10 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
+
+    private ImageView profilePicture;
+    private TextView name;
+    private TextView age;
+    private TextView description;
 
     @Nullable
     @Override
@@ -22,16 +30,10 @@ public class ProfileFragment extends Fragment {
     }
 
     //TODO ProfileFragment schließt sobald onCreate drin ist
-    /*@Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Button edit = Objects.requireNonNull(getView()).findViewById(R.id.editButton);
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),EditProfile.class);
-                startActivity(intent);
-            }
-        });
-    }*/
+    //Solved by Haydar: OnCreateView -> OnCreate bei Fragments bedeutet: findViewById darf noch nicht angewendet werden, returnt NULL!
+    @Override
+    public void onActivityCreated( Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        profilePicture = getView().findViewById(R.id.profile_picture);
+    }
 }
