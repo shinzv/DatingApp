@@ -33,13 +33,9 @@ public class ProfileFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start();
+                startActivity(new Intent(getActivity(), EditProfile.class));
             }
         });
-    }
-
-    public void start(){
-        startActivity(new Intent(getActivity(), EditProfile.class));
     }
 
 }
