@@ -18,10 +18,9 @@ import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
+    private Button editButton;
+
     private ImageView profilePicture;
-    private TextView name;
-    private TextView age;
-    private TextView description;
 
     @Nullable
     @Override
@@ -34,6 +33,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated( Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        profilePicture = getView().findViewById(R.id.profile_picture);
+        editButton = getView().findViewById(R.id.editButton);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileFragment.this, EditProfile.class);
+                startActivity(intent);
+            }
+        });
     }
+
 }
