@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/image"
+            android:src="@drawable/user"
             app:civ_border_color="@color/colorPrimary"
             app:civ_border_width="2dp" />
 
@@ -39,15 +39,16 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/name_and_age"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Joshua (18)"
+            android:foregroundGravity="bottom"
+            android:text="Gast"
             android:textAlignment="center"
             android:textColor="#2f3640"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

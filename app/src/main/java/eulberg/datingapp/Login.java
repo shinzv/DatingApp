@@ -33,6 +33,13 @@ public class Login extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        if (mAuth.getCurrentUser() != null) {
+            // User is signed in.
+            startActivity(new Intent(Login.this, Home.class));
+        } else {
+            // No user is signed in.
+        }
+
         RelativeLayout login = findViewById(R.id.login);
         AnimationDrawable animationDrawable = (AnimationDrawable) login.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
