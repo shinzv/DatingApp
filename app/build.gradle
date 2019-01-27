@@ -44,6 +44,9 @@ dependencies {
     //Round Images
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    //For asking for permission during runtime
+    implementation 'com.karumi:dexter:5.0.0'
+
 }
 //Firebase
 apply plugin: 'com.google.gms.google-services'
