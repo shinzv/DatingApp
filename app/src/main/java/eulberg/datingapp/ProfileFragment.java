@@ -17,7 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -34,7 +43,6 @@ public class ProfileFragment extends Fragment {
 
     private ImageButton editButton;
 
-
     //For taking a picture.
     private static final String TITLE = "DatingApp";
     private static final String DESCRIPTION = "Picture was took with DATINGAPP!";
@@ -47,6 +55,16 @@ public class ProfileFragment extends Fragment {
 
     //Over this URI is the image accesable
     private Uri imageURI;
+
+    //Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+
+    private UserSettings userSettings;
+    private User user;
+    private String userID;
 
     @Nullable
     @Override
@@ -68,6 +86,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
         //fix the portrait mode
         //Not able to do this in a class that extends Fragment
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -82,6 +101,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        fireBaseAuth();
     }
 
     private void startCamera(){
@@ -117,12 +137,74 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public void fireBaseAuth() {
+
+        mAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference();
+        userID = mAuth.getCurrentUser().getUid();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                //Wenn User eingeloggt
+                if (user != null) {
+                    userID = mAuth.getCurrentUser().getUid();
+                } else {
+
+                }
+            }
+        };
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //retrieving data
+                getUserSettings(dataSnapshot);
+                setProfileInfo();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void getUserSettings(DataSnapshot dataSnapshot){
+        Log.d(TAG, "Retrieving user information from firebase");
+
+        userSettings =  new UserSettings();
+
+        user = new User();
+
+        for (DataSnapshot ds: dataSnapshot.getChildren()){
+            if(ds.getKey().equals(ProfileFragment.this.getString(R.string.db_user_settings))){
+                Log.d(TAG, "Datasnapshot: " + ds);
+
+                try {
+                    userSettings = ds.child(userID).getValue(UserSettings.class);
+                    /*
+                    userSettings.setUsername(ds.child(userID).getValue(UserSettings.class).getUsername());
+                    userSettings.setDescription(ds.child(userID).getValue(UserSettings.class).getDescription());
+                    userSettings.setProfile_picture(ds.child(userID).getValue(UserSettings.class).getProfile_picture());
+                    */
+                }catch(NullPointerException e){
+                    Log.d(TAG, "Error occurred loading data: " + e.getMessage());
+                }
 
 
+            }
+        }
+
+    }
 
 
-
-
+    public void setProfileInfo(){
+        TextView username = getView().findViewById(R.id.name);
+        username.setText(userSettings.getUsername());
+    }
 
 
 }
