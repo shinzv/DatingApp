@@ -1,12 +1,14 @@
 package eulberg.datingapp;
 
 import android.Manifest;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -37,6 +39,15 @@ public class Home extends AppCompatActivity {
                     @Override public void onPermissionDenied(PermissionDeniedResponse response) {/* ... */}
                     @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
                 }).check();
+
+
+        /*
+        RelativeLayout home = findViewById(R.id.homeBackground);
+        AnimationDrawable animationDrawable = (AnimationDrawable) home.getBackground();
+        animationDrawable.setEnterFadeDuration(1000);
+        animationDrawable.setExitFadeDuration(3000);
+        animationDrawable.start();
+        */
 
     }
 

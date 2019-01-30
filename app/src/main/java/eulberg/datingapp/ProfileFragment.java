@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,8 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +36,16 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
 import java.net.URI;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
-
-    private ImageButton editButton;
 
     //For taking a picture.
     private static final String TITLE = "DatingApp";
@@ -66,6 +70,7 @@ public class ProfileFragment extends Fragment {
     private User user;
     private String userID;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,14 +83,16 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        editButton = getView().findViewById(R.id.editButton);
+
+        initializeImageLoader();
+
+        Button editButton = getView().findViewById(R.id.editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), EditProfile.class));
             }
         });
-
 
         //fix the portrait mode
         //Not able to do this in a class that extends Fragment
@@ -102,6 +109,13 @@ public class ProfileFragment extends Fragment {
         });
 
         fireBaseAuth();
+
+        //Animiert den  Hintergrund des Profilbildes
+        RelativeLayout profile = getView().findViewById(R.id.profileBackground);
+        AnimationDrawable animationDrawable = (AnimationDrawable) profile.getBackground();
+        animationDrawable.setEnterFadeDuration(1000);
+        animationDrawable.setExitFadeDuration(3000);
+        animationDrawable.start();
     }
 
     private void startCamera(){
@@ -180,7 +194,7 @@ public class ProfileFragment extends Fragment {
         user = new User();
 
         for (DataSnapshot ds: dataSnapshot.getChildren()){
-            if(ds.getKey().equals(ProfileFragment.this.getString(R.string.db_user_settings))){
+            if(ds.getKey().equals("user_settings")){
                 Log.d(TAG, "Datasnapshot: " + ds);
 
                 try {
@@ -194,7 +208,6 @@ public class ProfileFragment extends Fragment {
                     Log.d(TAG, "Error occurred loading data: " + e.getMessage());
                 }
 
-
             }
         }
 
@@ -203,7 +216,16 @@ public class ProfileFragment extends Fragment {
 
     public void setProfileInfo(){
         TextView username = getView().findViewById(R.id.name);
-        username.setText(userSettings.getUsername());
+        username.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");
+        String imageURL = "http://insectomaniaelevage.i.n.pic.centerblog.net/bc59993c.jpg";
+        CircleImageView image  = getView().findViewById(R.id.profile_picture);
+        UniversalImageLoader.setCircleImage(imageURL, image, null,"");
+    }
+
+    //Initialisiert den Image Loader
+    public void initializeImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
 
