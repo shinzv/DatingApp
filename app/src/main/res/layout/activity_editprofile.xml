@@ -1,29 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rel1">
-            <include layout="@layout/top_editprofile_toolbar"/>
+            android:id="@+id/rel_top">
+            <include layout = "@layout/top_editprofile_toolbar"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rel2">
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
 
 
-        </RelativeLayout>
+
+                <!-- name -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="80dp"
+                    android:background="@drawable/pink_border"
+                    android:id="@+id/relLayout1">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/person_pink"
+                        android:layout_centerVertical="true"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/username"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:background="@null"
+                        android:inputType="textNoSuggestions"
+                        android:textColor="@color/colorAccent"
+                        android:hint="Name"/>
+
+                </RelativeLayout>
+
+
+                <!-- age -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/relLayout1"
+                    android:background="@drawable/pink_border"
+                    android:id="@+id/relLayout2"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/age"
+                        android:layout_centerVertical="true"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/age"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:background="@null"
+                        android:inputType="textNoSuggestions"
+                        android:hint="Alter"/>
+
+                </RelativeLayout>
+
+
+                <!-- description -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_below="@+id/relLayout2"
+                    android:background="@drawable/pink_border"
+                    android:id="@+id/relLayout4"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView
+                        android:id="@+id/descImage"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/description" />
+
+                    <EditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/descImage"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@null"
+                        android:hint="About me"
+                        android:inputType="textMultiLine"
+                        android:textAlignment="textStart" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:text="Private Informationen"
+                    android:layout_below="@id/relLayout4"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:textColor="@color/pink"
+                    android:id="@+id/textPrivateInfo"/>
+
+
+                <!-- email -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/textPrivateInfo"
+                    android:background="@drawable/pink_border"
+                    android:id="@+id/relLayout5"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/email"
+                        android:layout_centerVertical="true"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/email"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:background="@null"
+                        android:inputType="textNoSuggestions"
+                        android:hint="Email"/>
+
+                </RelativeLayout>
+
+                <!-- phone number-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/relLayout5"
+                    android:background="@drawable/pink_border"
+                    android:id="@+id/relLayout6"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/phone_number"
+                        android:layout_centerVertical="true"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/phoneNumber"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="40dp"
+                        android:background="@null"
+                        android:inputType="textNoSuggestions"
+                        android:hint="Handynummer"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </ScrollView>
 
     </RelativeLayout>
 
