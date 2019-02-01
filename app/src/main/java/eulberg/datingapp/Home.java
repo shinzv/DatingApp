@@ -23,6 +23,10 @@ import java.util.List;
 
 public class Home extends AppCompatActivity {
 
+    private ChatFragment chatFragment = new ChatFragment();
+    private DiscoverFragment discoverFragment = new DiscoverFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +35,7 @@ public class Home extends AppCompatActivity {
         BottomNavigationView nav = findViewById(R.id.navigation_bar);
         nav.setOnNavigationItemSelectedListener(navListener);
         //Default fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscoverFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, chatFragment).commit();
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
@@ -59,13 +63,13 @@ public class Home extends AppCompatActivity {
 
             switch (item.getItemId()){
                 case R.id.nav_chat:
-                    selectedFragment =  new ChatFragment();
+                    selectedFragment = chatFragment;
                     break;
                 case R.id.nav_discover:
-                    selectedFragment =  new DiscoverFragment();
+                    selectedFragment = discoverFragment;
                     break;
                 case R.id.nav_profile:
-                    selectedFragment =  new ProfileFragment();
+                    selectedFragment =  profileFragment;
                     break;
 
             }

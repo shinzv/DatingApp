@@ -59,6 +59,11 @@ public class EditProfile extends AppCompatActivity {
         loadData();
     }
 
+    /**
+     *
+     * @param item das ausgewählte item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();

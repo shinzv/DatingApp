@@ -1,8 +1,13 @@
 package eulberg.datingapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
@@ -17,11 +22,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,26 +35,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment  {
 
     //For taking a picture.
-    private static final String TITLE = "DatingApp";
-    private static final String DESCRIPTION = "Picture was took with DATINGAPP!";
+    private static final String TITLE = "Peer";
+    private static final String DESCRIPTION = "Picture was took with peer!";
 
     private static final String TAG = ProfileFragment.class.getSimpleName();
     private static final int IMAGE_CAPTURE = 1;
@@ -60,15 +59,28 @@ public class ProfileFragment extends Fragment {
     //Over this URI is the image accesable
     private Uri imageURI;
 
+    //Galerie Auswahl
+    private static final int RQ_GALLERY_PICK = 2;
+    private static final String[] apps = new String[2];
+
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
+    //For storing the image in the storage -> the image is referenced to a user.
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+
 
     private UserSettings userSettings;
     private User user;
     private String userID;
+
+    //SharedPreferences
+    public static final String SHARED_PREFS = "SharedPrefs";
+
+    public static final String uriImg= "URI";
 
 
     @Nullable
@@ -84,7 +96,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initializeImageLoader();
+        //initializeImageLoader();
 
         Button editButton = getView().findViewById(R.id.editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -100,11 +112,34 @@ public class ProfileFragment extends Fragment {
         //Nicht nötig? Fragment ist mit einer Activity assoziiert
         //getActivity().setContentView(R.layout.main);
 
+        //Initializing Apps Array for the AlertDialog
+        apps[0] = "Kamera";
+        apps[1] = "Galerie";
+
         profilePicture = getView().findViewById(R.id.profile_picture);
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startCamera();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("App auswählen...")
+                        .setItems(apps, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                switch (which) {
+                                    case 0:
+                                        startCamera();
+                                        break;
+                                    case 1:
+                                        startGalery();
+                                        break;
+                                }
+
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -116,8 +151,23 @@ public class ProfileFragment extends Fragment {
         animationDrawable.setEnterFadeDuration(1000);
         animationDrawable.setExitFadeDuration(3000);
         animationDrawable.start();
+
+        //Aktualisiere das Profilbild.
+        loadProfilePicture();
     }
 
+    /**
+     * Startet die Galarie und lässt den Benutzer ein Bild auswählen, das dann zu seinem Profilbild wird.
+     */
+    private void startGalery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, RQ_GALLERY_PICK);
+    }
+
+
+    /**
+     * startet die vorgefertigte Kamera-Activity und erhät ein Ergebnis.
+     */
     private void startCamera(){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, TITLE);
@@ -130,23 +180,88 @@ public class ProfileFragment extends Fragment {
         startActivityForResult(intent, IMAGE_CAPTURE);
     }
 
+    /**
+     * Wird aufgerufen, nachdem das Ergebnis einer Activity zurückkommt. Das Ergebnis wird hier empfangen und verarbeitet.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        //Kamera
         if(requestCode == IMAGE_CAPTURE){
             if(resultCode == RESULT_OK){
                 try{
+                    //Hier wird kein Try catch gebraucht, da das Bild neu aufgenommen wird.
                     Bitmap b1 = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
-                    //Größe des aufgenommenen Bildes
+                    //Größe des aufgenommenen Bildes für die eventuelle Skalierung(Hier unnötig!)
                     float w1 = b1.getWidth();
                     float h1 = b1.getHeight();
                     profilePicture.setImageBitmap(b1);
+                    saveProfilePicture();
                 }catch (IOException e) { //und FileNotFoundException
 
                 }
             }else{
                 int rowsDeleted = getActivity().getContentResolver().delete(imageURI, null, null);
                 Log.d(TAG, rowsDeleted + " rows deleted");
+            }
+        }else if (requestCode == RQ_GALLERY_PICK){
+            if(resultCode == RESULT_OK){
+                //Data is a intent
+                if(data != null){
+                    imageURI = data.getData();
+
+                    try {
+                        Bitmap b1 = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
+                        profilePicture.setImageBitmap(b1);
+                        saveProfilePicture();
+                    } catch (FileNotFoundException e){
+                        e.printStackTrace();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+
+        }else{
+            getActivity().finish();
+        }
+        //Galerie
+
+    }
+
+    /**
+     * Saves the profile Picture locally and on the server!
+     */
+    private void saveProfilePicture(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(uriImg, imageURI.toString());
+        editor.apply();
+
+        //Saving on the server
+        FirebaseUser user = mAuth.getCurrentUser();
+        Log.d(TAG, "USER ID" + user.getUid());
+        Toast.makeText(getContext(), user.getUid(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void loadProfilePicture(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        //Uri ist abstract und kann nicht instanziiert werden.
+        imageURI = Uri.parse(sharedPreferences.getString(uriImg, ""));
+        if(imageURI.toString() != "") {
+            try {
+                Bitmap b1 = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
+                profilePicture.setImageBitmap(b1);
+            }catch (FileNotFoundException e){
+                e.printStackTrace();
+            }catch (IOException e){
+                e.printStackTrace();
             }
         }
     }
@@ -175,7 +290,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //retrieving data
                 getUserSettings(dataSnapshot);
-                setProfileInfo();
+                //setProfileInfo();
             }
 
             @Override
@@ -214,7 +329,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    public void setProfileInfo(){
+    /*public void setProfileInfo(){
         TextView username = getView().findViewById(R.id.name);
         username.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");
         String imageURL = "http://insectomaniaelevage.i.n.pic.centerblog.net/bc59993c.jpg";
@@ -226,7 +341,7 @@ public class ProfileFragment extends Fragment {
     public void initializeImageLoader(){
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
-    }
+    }*/
 
 
 }
