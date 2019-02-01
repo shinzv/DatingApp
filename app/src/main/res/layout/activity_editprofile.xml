@@ -13,17 +13,25 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/save_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relLayout4"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        app:elevation="4dp"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="right|bottom"
+        app:srcCompat="@android:drawable/checkbox_on_background" />
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rel_top">
-
-        </RelativeLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -35,20 +43,20 @@
                 android:padding="20dp">
 
 
-
                 <!-- name -->
+
                 <RelativeLayout
+                    android:id="@+id/relLayout1"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="80dp"
-                    android:background="@drawable/pink_border"
-                    android:id="@+id/relLayout1">
+                    android:background="@drawable/pink_border">
 
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/person_pink"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/person_pink" />
 
                     <EditText
                         android:id="@+id/username"
@@ -65,40 +73,40 @@
 
                 <!-- age -->
                 <RelativeLayout
+                    android:id="@+id/relLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@+id/relLayout1"
-                    android:background="@drawable/pink_border"
-                    android:id="@+id/relLayout2"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/pink_border">
 
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/age"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/age" />
 
                     <EditText
+                        android:id="@+id/age"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/age"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="40dp"
                         android:background="@null"
-                        android:inputType="textNoSuggestions"
-                        android:hint="Alter"/>
+                        android:hint="Alter"
+                        android:inputType="number" />
 
                 </RelativeLayout>
 
 
                 <!-- description -->
                 <RelativeLayout
+                    android:id="@+id/relLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
                     android:layout_below="@+id/relLayout2"
-                    android:background="@drawable/pink_border"
-                    android:id="@+id/relLayout4"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/pink_border">
 
                     <ImageView
                         android:id="@+id/descImage"
@@ -126,68 +134,68 @@
 
 
                 <TextView
+                    android:id="@+id/textPrivateInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp"
-                    android:text="Private Informationen"
                     android:layout_below="@id/relLayout4"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="50dp"
+                    android:text="Private Informationen"
                     android:textColor="@color/pink"
-                    android:id="@+id/textPrivateInfo"/>
+                    android:textSize="25sp" />
 
 
                 <!-- email -->
                 <RelativeLayout
+                    android:id="@+id/relLayout5"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@+id/textPrivateInfo"
-                    android:background="@drawable/pink_border"
-                    android:id="@+id/relLayout5"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/pink_border">
 
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/email"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/email" />
 
                     <EditText
+                        android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/email"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="40dp"
                         android:background="@null"
-                        android:inputType="textNoSuggestions"
-                        android:hint="Email"/>
+                        android:hint="Email"
+                        android:inputType="textNoSuggestions" />
 
                 </RelativeLayout>
 
                 <!-- phone number-->
                 <RelativeLayout
+                    android:id="@+id/relLayout6"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@+id/relLayout5"
-                    android:background="@drawable/pink_border"
-                    android:id="@+id/relLayout6"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/pink_border">
 
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/phone_number"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/phone_number" />
 
                     <EditText
+                        android:id="@+id/phoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/phoneNumber"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="40dp"
                         android:background="@null"
-                        android:inputType="textNoSuggestions"
-                        android:hint="Handynummer"/>
+                        android:hint="Handynummer"
+                        android:inputType="textNoSuggestions|number" />
 
                 </RelativeLayout>
 
