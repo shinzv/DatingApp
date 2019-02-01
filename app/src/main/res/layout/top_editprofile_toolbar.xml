@@ -21,31 +21,31 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent">
+                android:layout_width="match_parent"><RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/backArrow"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="1dp"
+                    android:text="Profil einrichten"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/backArrow"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginTop="1dp"
-                        android:text="Profil einrichten"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
+                <ImageButton
+                    android:id="@+id/backArrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    app:srcCompat="@drawable/arrow" />
 
-                    <ImageButton
-                        android:id="@+id/backArrow"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:background="@null"
-                        app:srcCompat="@drawable/arrow" />
+            </RelativeLayout>
 
-                </RelativeLayout>
+
 
             </android.support.v7.widget.Toolbar>
 
