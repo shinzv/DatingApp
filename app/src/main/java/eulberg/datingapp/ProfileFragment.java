@@ -1,8 +1,7 @@
 package eulberg.datingapp;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,9 +25,12 @@ import android.widget.Button;
 
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,11 +39,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -55,6 +64,7 @@ public class ProfileFragment extends Fragment  {
 
     //Views
     private ImageView profilePicture;
+    private TextView nameAndAge;
 
     //Over this URI is the image accesable
     private Uri imageURI;
@@ -81,7 +91,8 @@ public class ProfileFragment extends Fragment  {
     public static final String SHARED_PREFS = "SharedPrefs";
 
     public static final String uriImg= "URI";
-
+    public static final String name = "Name";
+    public static final String age = "Age";
 
     @Nullable
     @Override
@@ -96,9 +107,11 @@ public class ProfileFragment extends Fragment  {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //initializeImageLoader();
 
+        //Initializing views
+        nameAndAge = getView().findViewById(R.id.name);
         Button editButton = getView().findViewById(R.id.editButton);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,11 +119,8 @@ public class ProfileFragment extends Fragment  {
             }
         });
 
-        //fix the portrait mode
-        //Not able to do this in a class that extends Fragment
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        //Nicht nötig? Fragment ist mit einer Activity assoziiert
-        //getActivity().setContentView(R.layout.main);
+
+
 
         //Initializing Apps Array for the AlertDialog
         apps[0] = "Kamera";
@@ -153,7 +163,7 @@ public class ProfileFragment extends Fragment  {
         animationDrawable.start();
 
         //Aktualisiere das Profilbild.
-        loadProfilePicture();
+        loadProfileFiles();
     }
 
     /**
@@ -195,10 +205,18 @@ public class ProfileFragment extends Fragment  {
                 try{
                     //Hier wird kein Try catch gebraucht, da das Bild neu aufgenommen wird.
                     Bitmap b1 = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
-                    //Größe des aufgenommenen Bildes für die eventuelle Skalierung(Hier unnötig!)
+
+                    //Größe des aufgenommenen Bildes für die eventuelle Skalierung
                     float w1 = b1.getWidth();
                     float h1 = b1.getHeight();
-                    profilePicture.setImageBitmap(b1);
+                    //skalierung auf 720p
+                    int h2 = 720;
+                    int w2 = (int)(w1 / h1 * (float) h2);
+                    Bitmap scaledBitmap = b1.createScaledBitmap(b1, w2, h2, false);
+                    imageURI = getImageUri(getContext(), scaledBitmap);
+
+                    profilePicture.setImageBitmap(scaledBitmap);
+
                     saveProfilePicture();
                 }catch (IOException e) { //und FileNotFoundException
 
@@ -207,7 +225,7 @@ public class ProfileFragment extends Fragment  {
                 int rowsDeleted = getActivity().getContentResolver().delete(imageURI, null, null);
                 Log.d(TAG, rowsDeleted + " rows deleted");
             }
-        }else if (requestCode == RQ_GALLERY_PICK){
+        }else if (requestCode == RQ_GALLERY_PICK){ //Galerie
             if(resultCode == RESULT_OK){
                 //Data is a intent
                 if(data != null){
@@ -215,7 +233,17 @@ public class ProfileFragment extends Fragment  {
 
                     try {
                         Bitmap b1 = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
-                        profilePicture.setImageBitmap(b1);
+
+                        //Größe des aufgenommenen Bildes für die eventuelle Skalierung
+                        float w1 = b1.getWidth();
+                        float h1 = b1.getHeight();
+                        //skalierung auf 720p
+                        int h2 = 720;
+                        int w2 = (int)(w1 / h1 * (float) h2);
+                        Bitmap scaledBitmap = b1.createScaledBitmap(b1, w2, h2, false);
+                        imageURI = getImageUri(getContext(), scaledBitmap);
+                        profilePicture.setImageBitmap(scaledBitmap);
+
                         saveProfilePicture();
                     } catch (FileNotFoundException e){
                         e.printStackTrace();
@@ -230,7 +258,7 @@ public class ProfileFragment extends Fragment  {
         }else{
             getActivity().finish();
         }
-        //Galerie
+
 
     }
 
@@ -243,14 +271,89 @@ public class ProfileFragment extends Fragment  {
         editor.putString(uriImg, imageURI.toString());
         editor.apply();
 
-        //Saving on the server
+        //Saving the image on the server
         FirebaseUser user = mAuth.getCurrentUser();
-        Log.d(TAG, "USER ID" + user.getUid());
-        Toast.makeText(getContext(), user.getUid(), Toast.LENGTH_SHORT).show();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
+        uploadImage();
 
     }
 
-    private void loadProfilePicture(){
+    /**
+     * Speichert das Profilbild auf dem Server ab.
+     */
+    private void uploadImage(){
+        if(imageURI != null){
+
+            try {
+                Bitmap b1 = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
+
+                //Größe des aufgenommenen Bildes für die eventuelle Skalierung
+                float w1 = b1.getWidth();
+                float h1 = b1.getHeight();
+                //skalierung auf 720p
+                int h2 = 720;
+                int w2 = (int)(w1 / h1 * (float) h2);
+                Bitmap scaledBitmap = b1.createScaledBitmap(b1, w2, h2, false);
+
+            }catch (FileNotFoundException e){
+                e.printStackTrace();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            //Es wird unter dem Verzeichnis "ProfilePictures/ " userId abgespeichert um jeden user sein Profilbild zuzuordnen.
+            StorageReference ref = storageReference.child("ProfilePictures/" + userID );
+            ref.putFile(imageURI)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Uploaded!", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //Prozentangabe: Wie viel bereits verschickt wurde.
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded : " + progress + "%");
+                        }
+                    });
+        }
+    }
+
+    //------------------------------------------------------
+    //Konvertierung von Bitmaps in Uris
+    //------------------------------------------------------
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    //----------------------------------------------------------------------
+    //Konvertierung von Bitmaps in Uris beendet
+    //----------------------------------------------------------------------
+
+    /**
+     * lädt die Uri des Profilbilds aus den SharedPrefs Daten aus und lädt es in die CicleImageView.Außerdem wird der Name und das Alter ausgelesen.
+     */
+    private void loadProfileFiles(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         //Uri ist abstract und kann nicht instanziiert werden.
         imageURI = Uri.parse(sharedPreferences.getString(uriImg, ""));
@@ -264,6 +367,8 @@ public class ProfileFragment extends Fragment  {
                 e.printStackTrace();
             }
         }
+        String nameAge = sharedPreferences.getString(name, "Gast") + " (" + sharedPreferences.getString(age, "0") + ")";
+        nameAndAge.setText(nameAge);
     }
 
     public void fireBaseAuth() {
