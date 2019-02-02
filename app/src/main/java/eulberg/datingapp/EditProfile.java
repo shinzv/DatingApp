@@ -11,9 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class EditProfile extends AppCompatActivity {
 
     private EditText nameEditText, ageEditText, descriptionEditText, emailEditText, phoneNumberEditText;

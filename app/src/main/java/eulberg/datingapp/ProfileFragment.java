@@ -7,10 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -45,11 +45,8 @@ import com.google.firebase.storage.UploadTask;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -115,7 +112,11 @@ public class ProfileFragment extends Fragment  {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), EditProfile.class));
+                if(checkInternetConnection()) {
+                    startActivity(new Intent(getActivity(), EditProfile.class));
+                }else{
+                    Toast.makeText(getContext(), "Keine Internet Verbindung!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -130,26 +131,30 @@ public class ProfileFragment extends Fragment  {
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(checkInternetConnection()) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("App auswählen...")
-                        .setItems(apps, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                                switch (which) {
-                                    case 0:
-                                        startCamera();
-                                        break;
-                                    case 1:
-                                        startGalery();
-                                        break;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("App auswählen...")
+                            .setItems(apps, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                    switch (which) {
+                                        case 0:
+                                            startCamera();
+                                            break;
+                                        case 1:
+                                            startGalery();
+                                            break;
+                                    }
+
                                 }
-
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else{
+                    Toast.makeText(getContext(), "Keine Internet Verbindung!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -339,6 +344,13 @@ public class ProfileFragment extends Fragment  {
     //------------------------------------------------------
     //Konvertierung von Bitmaps in Uris
     //------------------------------------------------------
+
+    /**
+     * Die übergebene Bitmap wird in eine Uri umgewandelt und zurückgegeben.
+     * @param inContext
+     * @param inImage
+     * @return
+     */
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -447,6 +459,22 @@ public class ProfileFragment extends Fragment  {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }*/
+
+    /**
+     * Checks if the user is connected to the internet. -> This method cannot be modularised because if it is static we cannot reference to the non-static method
+     * "getActivity()" which is essential for this method to work.
+     * @return wether the user is connected or not.
+     */
+    private boolean checkInternetConnection(){
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED){
+            //We are connected to a network
+            connected = true;
+        }
+        return connected;
+    }
 
 
 }
