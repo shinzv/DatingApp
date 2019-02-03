@@ -24,6 +24,7 @@
         <activity android:name=".Home" android:screenOrientation="portrait"/>
         <activity android:name=".Register" android:screenOrientation="portrait"></activity>
         <activity android:name=".EditProfile" android:screenOrientation="portrait"></activity>
+        <activity android:name=".ProfileSettings" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

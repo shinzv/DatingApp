@@ -108,6 +108,23 @@
             android:textSize="15dp"
             tools:ignore="NotSibling" />
 
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_toLeftOf="@+id/cardView"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/pink"
+            android:fontFamily="sans-serif"
+            android:text="Einstellungen"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            tools:ignore="NotSibling" />
 
 
     </LinearLayout>

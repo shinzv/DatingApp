@@ -120,6 +120,14 @@ public class ProfileFragment extends Fragment  {
             }
         });
 
+        Button settingsButton = getView().findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProfileSettings.class));
+            }
+        });
+
 
 
 
