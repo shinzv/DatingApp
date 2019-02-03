@@ -47,7 +47,7 @@ public class ProfileSettings extends AppCompatActivity {
         });
 
         Button deleteProfileButton = findViewById(R.id.deleteProfileButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        deleteProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteProfile();
