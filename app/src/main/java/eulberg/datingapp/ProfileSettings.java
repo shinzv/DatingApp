@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -73,6 +75,29 @@ public class ProfileSettings extends AppCompatActivity {
             }
         });
 
+        Toolbar myToolbar = findViewById(R.id.my_toolbar_profile_settings);
+        setSupportActionBar(myToolbar);
 
+        //Add back button
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+    }
+
+    /**
+     * Gibt dem Back-Button eine Funktion(zurück zum Homescreen)
+     * @param item das ausgewählte item
+     * @return ergebnis.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            this.finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

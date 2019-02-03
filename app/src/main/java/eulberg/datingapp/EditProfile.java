@@ -90,9 +90,9 @@ public class EditProfile extends AppCompatActivity {
     }
 
     /**
-     *
+     * Gibt dem Back-Button eine Funktion(zurück zum Homescreen)
      * @param item das ausgewählte item
-     * @return
+     * @return ergebnis.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
