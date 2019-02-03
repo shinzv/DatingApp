@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ChatFragment extends Fragment {
 
@@ -33,6 +34,7 @@ public class ChatFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_chat, container, false);
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -45,8 +47,10 @@ public class ChatFragment extends Fragment {
     private void initImageBitmaps() {
         //Bsp.:
         //chatImages.add(storageReference.child("ProfilePictures/"+mAuth.getCurrentUser().getUid()+".jpg").getDownloadUrl().toString());
+        chatUsernames.clear();
+        chatImages.clear();
         chatImages.add("https://firebasestorage.googleapis.com/v0/b/datingapp-65363.appspot.com/o/ProfilePictures%2FC8z7q46a4Xalu9hEBEMh5tDxAes2?alt=media&token=e9599e93-733b-41c5-a163-9ea23d57a46a");
-        chatUsernames.add("Semel");
+        chatUsernames.add(mAuth.getCurrentUser().getEmail());
         initRecyclerView();
     }
 
