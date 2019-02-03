@@ -80,4 +80,12 @@ public class Home extends AppCompatActivity {
             return true;
         }
     };
+
+    /**
+     * Regelt was passieren soll, wenn man den zurück Knopf/Touch screen bereich des Handys drückt.
+     */
+    @Override
+    public void onBackPressed(){
+        //Hier soll nichts passieren.
+    }
 }

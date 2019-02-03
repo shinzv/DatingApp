@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Register extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -35,6 +37,11 @@ public class Register extends AppCompatActivity {
     private Context mContext;
 
     private String userID;
+
+    //Gender
+    private CircleImageView male;
+    private CircleImageView female;
+    private String gender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,24 @@ public class Register extends AppCompatActivity {
         password2 = findViewById(R.id.password2);
         username = findViewById(R.id.username);
 
+        male = findViewById(R.id.male);
+        female = findViewById(R.id.female);
+
+        //Male and Female Button function
+        male.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gender = "male";
+            }
+        });
+
+        female.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gender = "female";
+            }
+        });
+
         //Register Button
         Button registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +92,12 @@ public class Register extends AppCompatActivity {
                         if(password.getText().toString().matches(".*\\d+.*")) {
                             //E-Mail Überprüfungen
                             if(email.getText().toString().contains("@") && email.getText().toString().split("@")[1].contains(".")){
-                                signUp(email.getText().toString(), password.getText().toString());
+                                //Überprüfe, ob ein Geschlecht angegeben wurde.
+                                if(gender != null) {
+                                    signUp(email.getText().toString(), password.getText().toString());
+                                } else{
+                                    Toast.makeText(Register.this, "Gib dein Geschlecht an", Toast.LENGTH_SHORT).show();
+                                }
                             }else {
                                 Toast.makeText(Register.this, "Gib bitte eine gültige E-Mail Adresse an", Toast.LENGTH_SHORT).show();
                             }
@@ -95,7 +125,7 @@ public class Register extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     userID = mAuth.getCurrentUser().getUid();
                     //Neuen Nutzer zur Datenbank hinzufügen
-                    addNewUser(getEmail(), getUsername(), "Ziemlich leer hier.", "male");
+                    addNewUser(getEmail(), getUsername(), "Ziemlich leer hier.", gender);
 
                     Intent intent = new Intent(Register.this, Home.class);
                     startActivity(intent);
@@ -144,7 +174,7 @@ public class Register extends AppCompatActivity {
         User user = new User(userID, username, email);
         reference.child(mContext.getString(R.string.db_users)).child(userID).setValue(user);
 
-        UserSettings settings = new UserSettings(0, description, gender, username, "");
+        UserSettings settings = new UserSettings(0, description, gender, username);
         reference.child(mContext.getString(R.string.db_user_settings)).child(userID).setValue(settings);
     }
 

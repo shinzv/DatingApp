@@ -6,14 +6,12 @@ public class UserSettings {
     private String description;
     private String gender;
     private String username;
-    private String profile_picture;
 
-    public UserSettings(long age, String description, String gender, String username, String profile_picture) {
+    public UserSettings(long age, String description, String gender, String username) {
         this.age = age;
         this.description = description;
         this.gender = gender;
         this.username = username;
-        this.profile_picture = profile_picture;
     }
 
     public UserSettings() {
@@ -52,13 +50,7 @@ public class UserSettings {
         this.username = username;
     }
 
-    public String getProfile_picture() {
-        return profile_picture;
-    }
 
-    public void setProfile_picture(String profile_picture) {
-        this.profile_picture = profile_picture;
-    }
 
     @Override
     public String toString() {
@@ -67,7 +59,6 @@ public class UserSettings {
                 ", description='" + description + '\'' +
                 ", gender='" + gender + '\'' +
                 ", username='" + username + '\'' +
-                ", profile_picture='" + profile_picture + '\'' +
                 '}';
     }
 }

@@ -93,4 +93,12 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
+
+    /**
+     * Regelt was passieren soll, wenn man den zurück Knopf/Touch screen bereich des Handys drückt.
+     */
+    @Override
+    public void onBackPressed(){
+        //Hier soll nichts passieren.
+    }
 }
