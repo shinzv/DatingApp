@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment  {
 
     //Galerie Auswahl
     private static final int RQ_GALLERY_PICK = 2;
-    private static final String[] apps = new String[2];
+    private static final String[] apps = new String[3];
 
     //Firebase
     private FirebaseAuth mAuth;
@@ -134,13 +134,13 @@ public class ProfileFragment extends Fragment  {
         //Initializing Apps Array for the AlertDialog
         apps[0] = "Kamera";
         apps[1] = "Galerie";
+        apps[2] = "Bild entfernen";
 
         profilePicture = getView().findViewById(R.id.profile_picture);
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(checkInternetConnection()) {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("App auswählen...")
                             .setItems(apps, new DialogInterface.OnClickListener() {
@@ -154,6 +154,8 @@ public class ProfileFragment extends Fragment  {
                                         case 1:
                                             startGalery();
                                             break;
+                                        case 2:
+                                            removePicture();
                                     }
 
                                 }
@@ -201,6 +203,21 @@ public class ProfileFragment extends Fragment  {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
         startActivityForResult(intent, IMAGE_CAPTURE);
+    }
+
+    private void removePicture() {
+        try {
+            storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(uriImg);
+            editor.apply();
+            //TODO Ursprungsbild muss direkt angezeigt werden und nicht erst wenn man das Fragment switcht
+            Toast.makeText(getContext(), "Bild entfernt", Toast.LENGTH_LONG).show();
+        }catch (NullPointerException n){
+            Toast.makeText(getContext(), "Kein Bild ausgewählt", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     /**
