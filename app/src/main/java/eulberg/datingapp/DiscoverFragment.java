@@ -19,6 +19,11 @@ public class DiscoverFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     /**
      * Checks if the user is connected to the internet. -> This method cannot be modularised because if it is static we cannot reference to the non-static method
      * "getActivity()" which is essential for this method to work.
