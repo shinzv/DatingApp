@@ -1,6 +1,8 @@
 package eulberg.datingapp;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String user_id;
     private String username;
     private String email;

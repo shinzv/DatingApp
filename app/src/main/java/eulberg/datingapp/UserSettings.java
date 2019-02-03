@@ -1,17 +1,21 @@
 package eulberg.datingapp;
 
-public class UserSettings {
+import java.io.Serializable;
+
+public class UserSettings implements Serializable {
 
     private long age;
     private String description;
     private String gender;
     private String username;
+   // private String phoneNumber;
 
     public UserSettings(long age, String description, String gender, String username) {
         this.age = age;
         this.description = description;
         this.gender = gender;
         this.username = username;
+        //this.phoneNumber = phoneNumber;
     }
 
     public UserSettings() {
@@ -50,6 +54,14 @@ public class UserSettings {
         this.username = username;
     }
 
+    /*public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }*/
+
 
 
     @Override
@@ -59,6 +71,7 @@ public class UserSettings {
                 ", description='" + description + '\'' +
                 ", gender='" + gender + '\'' +
                 ", username='" + username + '\'' +
+                //", phonenumber='" + phoneNumber + '\'' +
                 '}';
     }
 }

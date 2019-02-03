@@ -79,17 +79,14 @@ public class ProfileFragment extends Fragment  {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
-
+    //UserData
     private UserSettings userSettings;
-    private User user;
     private String userID;
 
     //SharedPreferences
     public static final String SHARED_PREFS = "SharedPrefs";
 
     public static final String uriImg= "URI";
-    public static final String name = "Name";
-    public static final String age = "Age";
 
     @Nullable
     @Override
@@ -113,7 +110,11 @@ public class ProfileFragment extends Fragment  {
             @Override
             public void onClick(View view) {
                 if(checkInternetConnection()) {
-                    startActivity(new Intent(getActivity(), EditProfile.class));
+                    Intent editProfileIntent = new Intent(getActivity(), EditProfile.class);
+                    //Übergabe des Objekts als Byte-Stream.
+                    editProfileIntent.putExtra("serialized_data_user_settings", userSettings);
+
+                    startActivity(editProfileIntent);
                 }else{
                     Toast.makeText(getContext(), "Keine Internet Verbindung!", Toast.LENGTH_SHORT).show();
                 }
@@ -388,7 +389,7 @@ public class ProfileFragment extends Fragment  {
     //----------------------------------------------------------------------
 
     /**
-     * lädt die Uri des Profilbilds aus den SharedPrefs Daten aus und lädt es in die CicleImageView.Außerdem wird der Name und das Alter ausgelesen.
+     * lädt die Uri des Profilbilds aus den SharedPrefs Daten aus und lädt es in die CicleImageView.
      */
     private void loadProfileFiles(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -404,8 +405,7 @@ public class ProfileFragment extends Fragment  {
                 e.printStackTrace();
             }
         }
-        String nameAge = sharedPreferences.getString(name, "Gast") + " (" + sharedPreferences.getString(age, "0") + ")";
-        nameAndAge.setText(nameAge);
+
     }
 
     public void fireBaseAuth() {
@@ -432,7 +432,7 @@ public class ProfileFragment extends Fragment  {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //retrieving data
                 getUserSettings(dataSnapshot);
-                //setProfileInfo();
+                setProfileInfo();
             }
 
             @Override
@@ -444,11 +444,10 @@ public class ProfileFragment extends Fragment  {
     }
 
     public void getUserSettings(DataSnapshot dataSnapshot){
-        Log.d(TAG, "Retrieving user information from firebase");
+        Log.d(TAG, "Retrieving user_settings information from firebase");
 
-        userSettings =  new UserSettings();
 
-        user = new User();
+        userSettings = new UserSettings();
 
         for (DataSnapshot ds: dataSnapshot.getChildren()){
             if(ds.getKey().equals("user_settings")){
@@ -456,11 +455,6 @@ public class ProfileFragment extends Fragment  {
 
                 try {
                     userSettings = ds.child(userID).getValue(UserSettings.class);
-                    /*
-                    userSettings.setUsername(ds.child(userID).getValue(UserSettings.class).getUsername());
-                    userSettings.setDescription(ds.child(userID).getValue(UserSettings.class).getDescription());
-                    userSettings.setProfile_picture(ds.child(userID).getValue(UserSettings.class).getProfile_picture());
-                    */
                 }catch(NullPointerException e){
                     Log.d(TAG, "Error occurred loading data: " + e.getMessage());
                 }
@@ -471,14 +465,11 @@ public class ProfileFragment extends Fragment  {
     }
 
 
-    /*public void setProfileInfo(){
-        TextView username = getView().findViewById(R.id.name);
-        username.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");
-        String imageURL = "http://insectomaniaelevage.i.n.pic.centerblog.net/bc59993c.jpg";
-        CircleImageView image  = getView().findViewById(R.id.profile_picture);
-        UniversalImageLoader.setCircleImage(imageURL, image, null,"");
+    public void setProfileInfo(){
+        nameAndAge.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");
     }
 
+    /*
     //Initialisiert den Image Loader
     public void initializeImageLoader(){
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());

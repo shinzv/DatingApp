@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -11,7 +11,7 @@
         android:background="@drawable/gradient"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_data"
@@ -66,7 +66,8 @@
                         android:layout_marginStart="40dp"
                         android:background="@null"
                         android:hint="Name"
-                        android:inputType="textNoSuggestions" />
+                        android:inputType="textNoSuggestions"
+                        android:maxLength="10" />
 
                 </RelativeLayout>
 
@@ -94,7 +95,8 @@
                         android:layout_marginStart="40dp"
                         android:background="@null"
                         android:hint="Alter"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:maxLength="2" />
 
                 </RelativeLayout>
 
@@ -139,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/relLayout4"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="30dp"
                     android:text="Private Informationen"
                     android:textColor="@color/pink"
                     android:textSize="25sp" />
@@ -168,36 +170,12 @@
                         android:layout_marginStart="40dp"
                         android:background="@null"
                         android:hint="Email"
-                        android:inputType="textNoSuggestions" />
+                        android:inputType="textNoSuggestions"
+                        android:maxLength="30" />
 
                 </RelativeLayout>
 
                 <!-- phone number-->
-                <RelativeLayout
-                    android:id="@+id/relLayout6"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/relLayout5"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/pink_border">
-
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/phone_number" />
-
-                    <EditText
-                        android:id="@+id/phoneNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="40dp"
-                        android:background="@null"
-                        android:hint="Handynummer"
-                        android:inputType="textNoSuggestions|number" />
-
-                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -205,7 +183,6 @@
         </ScrollView>
 
     </RelativeLayout>
-
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,6 @@
 package eulberg.datingapp;
 
-import android.content.Context;
+/*import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,11 +15,11 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import de.hdodenhof.circleimageview.CircleImageView;*/
 
 public class UniversalImageLoader {
 
-    private static final int defaultImage = R.drawable.user;
+    /*private static final int defaultImage = R.drawable.user;
     private Context mContext;
 
     public UniversalImageLoader(Context context) {
@@ -111,5 +111,5 @@ public class UniversalImageLoader {
                 }
             }
         });
-    }
+    }*/
 }
