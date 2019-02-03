@@ -25,7 +25,7 @@ public class ProfileSettings extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference reference;
+    private DatabaseReference databaseReference;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
@@ -34,6 +34,10 @@ public class ProfileSettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilesettings);
         mAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
 
         Button logoutButton = findViewById(R.id.logoutButton);
@@ -50,16 +54,25 @@ public class ProfileSettings extends AppCompatActivity {
         deleteProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteProfile();
+
+                /*StorageReference ref = storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid());
+                ref.delete();*/
+                DatabaseReference userDBRef = databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).getRef();
+                userDBRef.removeValue();
+                startActivity(new Intent(ProfileSettings.this, Login.class));
+                /*
+                //Entfernt den User aus der Authentication Liste
+                mAuth.getCurrentUser().delete();
+                mAuth.signOut();
+                startActivity(new Intent(ProfileSettings.this, Login.class));
+                */
+
             }
         });
 
 
     }
 
-    private void deleteProfile() {
-
-    }
 
 
     /*private void signIn(String email, String password){
