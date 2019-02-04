@@ -101,7 +101,6 @@ public class ProfileFragment extends Fragment  {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         //Initializing views
         nameAndAge = getView().findViewById(R.id.name);
         Button editButton = getView().findViewById(R.id.editButton);

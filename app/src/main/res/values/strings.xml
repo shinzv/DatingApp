@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DatingApp</string>
+    <string name="app_name">Peer</string>
     //Register
     <string name="db_users">users</string>
     <string name="db_user_settings">user_settings</string>
