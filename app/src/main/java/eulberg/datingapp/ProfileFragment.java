@@ -88,6 +88,8 @@ public class ProfileFragment extends Fragment  {
 
     public static final String uriImg= "URI";
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
