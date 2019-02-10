@@ -8,6 +8,8 @@ public class UserSettings implements Serializable {
     private String description;
     private String gender;
     private String username;
+    private double latitude;
+    private double longtitude;
    // private String phoneNumber;
 
     public UserSettings(long age, String description, String gender, String username) {
@@ -73,5 +75,21 @@ public class UserSettings implements Serializable {
                 ", username='" + username + '\'' +
                 //", phonenumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        this.longtitude = longtitude;
     }
 }
