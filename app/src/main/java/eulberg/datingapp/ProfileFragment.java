@@ -293,7 +293,7 @@ public class ProfileFragment extends Fragment  {
     }
 
     /**
-     * Saves the profile Picture locally and on the server!
+     * Speichert das Profilbild lokal und auf dem Server ab.
      */
     private void saveProfilePicture(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);

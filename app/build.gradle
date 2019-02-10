@@ -43,6 +43,10 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    //Swipecards
+    implementation 'com.mindorks:placeholderview:0.7.1'
+    implementation 'com.google.code.gson:gson:2.8.2'
+
 }
 //Firebase
 apply plugin: 'com.google.gms.google-services'
