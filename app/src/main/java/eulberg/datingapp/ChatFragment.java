@@ -18,12 +18,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class ChatFragment extends Fragment {
 
-    private ArrayList<String> chatUsernames = new ArrayList<>();
-    private ArrayList<String> chatImages = new ArrayList<>();
+    private ArrayList<String> chatUserIDs = new ArrayList<>();
     private FirebaseAuth mAuth;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
@@ -45,18 +43,14 @@ public class ChatFragment extends Fragment {
     }
 
     private void initImageBitmaps() {
-        //Bsp.:
-        //chatImages.add(storageReference.child("ProfilePictures/"+mAuth.getCurrentUser().getUid()+".jpg").getDownloadUrl().toString());
-        chatUsernames.clear();
-        chatImages.clear();
-        chatImages.add("https://firebasestorage.googleapis.com/v0/b/datingapp-65363.appspot.com/o/ProfilePictures%2FC8z7q46a4Xalu9hEBEMh5tDxAes2?alt=media&token=e9599e93-733b-41c5-a163-9ea23d57a46a");
-        chatUsernames.add(mAuth.getCurrentUser().getEmail());
+        chatUserIDs.clear();
+        chatUserIDs.add("dgDPJpcowzauXZvoJlV2zIoHDzg1");
         initRecyclerView();
     }
 
     private void initRecyclerView(){
         RecyclerView recyclerView = getView().findViewById(R.id.chats);
-        ChatAdapter adapter = new ChatAdapter(getContext(),chatUsernames,chatImages);
+        ChatAdapter adapter = new ChatAdapter(getContext(), chatUserIDs);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

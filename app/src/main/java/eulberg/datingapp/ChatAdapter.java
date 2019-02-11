@@ -12,6 +12,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -19,14 +27,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
-    private ArrayList<String> chatUsernames = new ArrayList<>();
-    private ArrayList<String> chatImages = new ArrayList<>();
+    private ArrayList<String> chatUserIDs;
     private Context context;
 
 
-    public ChatAdapter(Context context, ArrayList<String> chatUsernames, ArrayList<String> chatImages) {
-        this.chatUsernames = chatUsernames;
-        this.chatImages = chatImages;
+    public ChatAdapter(Context context, ArrayList<String> chatUserIDs) {
+        this.chatUserIDs = chatUserIDs;
         this.context = context;
     }
 
@@ -40,26 +46,44 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Glide.with(context).asBitmap().load(chatImages.get(i)).into(viewHolder.chatImage);
-        viewHolder.chatUsername.setText(chatUsernames.get(i));
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        //TODO Profilbild und Namen über die ID festlegen
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(chatUserIDs.get(i));
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                viewHolder.chatUsername.setText(user.getUsername());
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+chatUserIDs.get(i));
+                long megabyte = 1024 * 1024;
+                storageReference.getBytes(megabyte).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Glide.with(context).asBitmap().load(bytes).into(viewHolder.chatImage);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Chat öffnen
-
                 Intent intent = new Intent(context,Message.class);
-                intent.putExtra("userID","dgDPJpcowzauXZvoJlV2zIoHDzg1");
+                intent.putExtra("userID",chatUserIDs.get(i));
                 context.startActivity(intent);
-
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return chatUsernames.size();
+        return chatUserIDs.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
