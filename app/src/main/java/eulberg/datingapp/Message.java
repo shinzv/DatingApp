@@ -54,7 +54,6 @@ public class Message extends AppCompatActivity {
         final String userID = intent.getStringExtra("userID");
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userID);
-        getIncomingIntent();
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -99,11 +98,6 @@ public class Message extends AppCompatActivity {
 
     }
 
-    private void getIncomingIntent(){
-        if(getIntent().hasExtra("userID")){
-            String chatUser = getIntent().getStringExtra("userID");
-        }
-    }
 
 
 
