@@ -32,6 +32,12 @@ public class Swipecard {
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
 
+    /**
+     * Instanziiert ein Swipecards-Objekt
+     * @param context Kontext
+     * @param user User-Settings-Objekt
+     * @param swipeView SwipePlaceHolderView
+     */
     public Swipecard(Context context, UserSettings user, SwipePlaceHolderView swipeView) {
         mContext = context;
         this.user = user;

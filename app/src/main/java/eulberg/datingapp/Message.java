@@ -33,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Message extends AppCompatActivity {
 
+    //Referenzen
     CircleImageView profile_image;
     TextView username;
 
@@ -44,11 +45,15 @@ public class Message extends AppCompatActivity {
 
     Intent intent;
 
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
         //TODO Toolbar mit einbauen
 
         profile_image = findViewById(R.id.messageImage);

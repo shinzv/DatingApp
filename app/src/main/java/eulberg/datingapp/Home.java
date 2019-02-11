@@ -229,7 +229,7 @@ public class Home extends AppCompatActivity {
         //Überprüft, ob die Berechtigung gegeben wurde.
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             //Ruft den Listener jede Minute auf.
-            locationManager.requestLocationUpdates(provider, 1000, 0, listener);
+            locationManager.requestLocationUpdates(provider, 100, 0, listener);
         } else{
             Log.d(TAG,"GPS permissions denied.");
         }
