@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -45,6 +46,8 @@ public class Message extends AppCompatActivity {
 
     Intent intent;
 
+    private ImageView backButton;
+
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
      * Initialisierungen usw...
@@ -54,7 +57,15 @@ public class Message extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        //TODO Toolbar mit einbauen
+        //TODO Toolbar mit einbauen: Checked, made by cuzi
+        backButton = findViewById(R.id.messageBackArrow);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Message.this, Home.class));
+            }
+        });
 
         profile_image = findViewById(R.id.messageImage);
         username = findViewById(R.id.messageUsername);
