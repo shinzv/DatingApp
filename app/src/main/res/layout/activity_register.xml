@@ -57,7 +57,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
                 android:backgroundTint="@color/colorAccent"
-                android:drawableRight="@drawable/person"
+                android:drawableRight="@drawable/email_icon"
                 android:ems="10"
                 android:hint="E-mail"
                 android:inputType="textEmailAddress"
