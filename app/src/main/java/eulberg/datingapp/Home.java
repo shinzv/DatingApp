@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,7 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -121,8 +125,14 @@ public class Home extends AppCompatActivity {
                     if (location != null) {
                         String s = "Breite: " + location.getLatitude() + "\nLänge: " + location.getLongitude();
                         Log.d(TAG, s);
-                        reference.child(getApplicationContext().getString(R.string.db_user_settings)).child(userID).child("latitude").setValue(location.getLatitude());
-                        reference.child(getApplicationContext().getString(R.string.db_user_settings)).child(userID).child("longtitude").setValue(location.getLongitude());
+                        Geocoder geocoder = new Geocoder(Home.this, Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            String stadtName = addresses.get(0).getLocality();
+                            reference.child("user_settings").child(userID).child("city").setValue(stadtName);
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
                     }
                 }
 

@@ -2,6 +2,7 @@ package eulberg.datingapp;
 
 import android.content.Context;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 //TODO Chat öffnen
+                context.startActivity(new Intent(context, Message.class));
             }
         });
     }
