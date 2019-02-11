@@ -8,11 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +32,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +47,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -45,8 +55,11 @@ import com.google.firebase.storage.UploadTask;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -305,8 +318,7 @@ public class ProfileFragment extends Fragment  {
 
         //Saving the image on the server
         FirebaseUser user = mAuth.getCurrentUser();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
+
 
         uploadImage();
 
@@ -393,7 +405,7 @@ public class ProfileFragment extends Fragment  {
      * lädt die Uri des Profilbilds aus den SharedPrefs Daten aus und lädt es in die CicleImageView.
      */
     private void loadProfileFiles(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         //Uri ist abstract und kann nicht instanziiert werden.
         imageURI = Uri.parse(sharedPreferences.getString(uriImg, ""));
         if(imageURI.toString() != "") {
@@ -405,8 +417,177 @@ public class ProfileFragment extends Fragment  {
             }catch (IOException e){
                 e.printStackTrace();
             }
+        } else {
+            //Wenn kein Bild in den Prefs existiert, dann downloade es vom Server.
+            FirebaseStorage localStorage = FirebaseStorage.getInstance();
+            // Create a reference to a file from a Google Cloud Storage URI
+            StorageReference gsReference = localStorage.getReference();
+            StorageReference ref = gsReference.child("ProfilePictures/zrTMhCSqvFPAh1olCcHtyTMoBTh2.jpeg");
+
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+userID);
+            long megabyte = 1024 * 1024;
+            storageReference.getBytes(megabyte).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Glide.with(ProfileFragment.this).asBitmap().load(bytes).into(profilePicture);
+                    Uri imageUri = saveImage(bytes);
+                    if(imageUri != null) {
+                        sharedPreferences.edit().putString(uriImg, imageUri.toString()).apply();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            /*ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    //Erfolg
+                    //Es wird nur der Download Link des Bildes erhalten!!!!
+                    Glide.with(getContext()).load(uri).into(profilePicture);
+
+                    Glide.with(getContext()).asBitmap().load(uri).into(new Target<Bitmap>() {
+                        @Override
+                        public void onLoadStarted(@Nullable Drawable placeholder) { Log.d(TAG, "Glide: onLoadStarted()"); }
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) { Log.d(TAG, "Glide: onLoadFailed()"); }
+
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            Log.d(TAG, "Glide: onResourceReady()");
+
+                            String imagePath = saveImage(resource);
+                            sharedPreferences.edit().putString(uriImg, imagePath);
+                            Toast.makeText(getContext(),"asdkasdj", Toast.LENGTH_LONG);
+                            profilePicture.setImageURI(Uri.parse(imagePath));
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                            Log.d(TAG, "Glide: onLoadCleared()");
+                        }
+
+                        @Override
+                        public void getSize(@NonNull SizeReadyCallback cb) {
+                            Log.d(TAG, "Glide: getSize()");
+                        }
+
+                        @Override
+                        public void removeCallback(@NonNull SizeReadyCallback cb) {
+                            Log.d(TAG, "Glide: removeCallback()");
+                        }
+
+                        @Override
+                        public void setRequest(@Nullable Request request) {
+                            Log.d(TAG, "Glide: setRequest()");
+                        }
+
+                        @Nullable
+                        @Override
+                        public Request getRequest() {
+                            return null;
+                        }
+
+                        @Override
+                        public void onStart() {
+                            Log.d(TAG, "Glide: onStart()");
+                        }
+
+                        @Override
+                        public void onStop() {
+                            Log.d(TAG, "Glide: onStop()");
+                        }
+
+                        @Override
+                        public void onDestroy() {
+                            Log.d(TAG, "Glide: onDestroy()");
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    //Error
+                    e.printStackTrace();
+                }
+            });*/
+
         }
 
+    }
+
+    private Uri saveImage (byte[] bytes) {
+        Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+        File photo=new File(Environment.getExternalStorageDirectory(), "photo.jpg");
+
+        if(photo.exists()){
+            photo.delete();
+        }
+
+        try{
+            FileOutputStream fos = new FileOutputStream(photo.getAbsolutePath());
+
+            fos.write(bytes);
+            fos.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return Uri.parse(photo.getAbsolutePath());
+
+        /*
+        String savedImagePath = null;
+
+        String imageFileName = "JPEG_" + userID + ".jpg";
+
+        //Zweites Argument ist der Name unseres Ordners
+        File storageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "Peer Profilbilder");
+        boolean success = true;
+
+        //Wenn das Directory noch nicht existiert...
+        if(!storageDirectory.exists()){
+            // File.mkdir() returns a boolean wether a directory is created or not.(true = created, false = not created)
+            success = storageDirectory.mkdir();
+        }
+        if(success){
+            File imageFile = new File(storageDirectory, imageFileName);
+            //absolute Path: for example: "C:/ProfilePictures/......"
+            savedImagePath = imageFile.getAbsolutePath();
+
+            try {
+                OutputStream fOut = new FileOutputStream(imageFile);
+                //Arguments: Format, Quality, Outputstream
+                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                fOut.close();
+            } catch (FileNotFoundException e){
+                e.printStackTrace();
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+
+            //Add image to system gallery
+            addPictureToSystemGallery(savedImagePath);
+            Toast.makeText(getContext(), "Image saved", Toast.LENGTH_LONG).show();
+        }
+        return savedImagePath;
+        */
+    }
+
+    private void addPictureToSystemGallery(String imagePath){
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(imagePath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        try {
+            getActivity().sendBroadcast(mediaScanIntent);
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     public void fireBaseAuth() {

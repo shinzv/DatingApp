@@ -41,7 +41,7 @@ public class EditProfile extends AppCompatActivity {
         setContentView(R.layout.activity_editprofile);
 
         //Umwandeln des Byte-Streams
-        userSettings = (UserSettings) getIntent().getSerializableExtra("serialized_data_user_settings");
+        //userSettings = (UserSettings) getIntent().getSerializableExtra("serialized_data_user_settings");
 
         //Initialize all views
         nameEditText = findViewById(R.id.username);
@@ -73,6 +73,7 @@ public class EditProfile extends AppCompatActivity {
     }
 
     private void load(){
+
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -159,7 +160,7 @@ public class EditProfile extends AppCompatActivity {
     }
 
     /**
-     * Lädt die Daten des Users runter und speichert diese im User-Objekt
+     * Lädt die Daten des Users runter und speichert diese im User-Objekt ein(Das selbe wird für das UserSettings-Objekt ausgeführt.)
      * @param dataSnapshot DataSnapshot der aktuellen Datenbank.
      */
     public void getUser(DataSnapshot dataSnapshot){
@@ -174,6 +175,20 @@ public class EditProfile extends AppCompatActivity {
 
                 try {
                     user = ds.child(mAuth.getUid()).getValue(User.class);
+                }catch(NullPointerException e){
+                    Log.d(TAG, "Error occurred loading data: " + e.getMessage());
+                }
+
+            }
+        }
+
+        userSettings = new UserSettings();
+        for (DataSnapshot ds: dataSnapshot.getChildren()){
+            if(ds.getKey().equals("user_settings")){
+                Log.d(TAG, "Datasnapshot: " + ds);
+
+                try {
+                    userSettings = ds.child(mAuth.getUid()).getValue(UserSettings.class);
                 }catch(NullPointerException e){
                     Log.d(TAG, "Error occurred loading data: " + e.getMessage());
                 }
