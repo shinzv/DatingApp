@@ -68,7 +68,7 @@ public class Register extends AppCompatActivity {
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
 
-        //Male and Female Button function
+        //male and Female Button function
         male.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
