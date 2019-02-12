@@ -50,7 +50,7 @@ public class ChatFragment extends Fragment {
 
     private void initRecyclerView(){
         RecyclerView recyclerView = getView().findViewById(R.id.chats);
-        ChatAdapter adapter = new ChatAdapter(getContext(), chatUserIDs);
+        ChatFragmentAdapter adapter = new ChatFragmentAdapter(getContext(), chatUserIDs);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
