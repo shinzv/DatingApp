@@ -115,11 +115,11 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void signUp(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        try{
+        mAuth.createUserWithEmailAndPassword(email, hashPassword(password)).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -139,6 +139,9 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+        } catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
     }
 
     public void fireBaseAuth() {
