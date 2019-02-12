@@ -98,7 +98,6 @@ public class DiscoverFragment extends Fragment {
             }
         };
 
-        //SELECT * FROM user_settings
         Query query = FirebaseDatabase.getInstance().getReference("user_settings")
                 .orderByChild("gender")
                 .equalTo(genderToSearchFor)

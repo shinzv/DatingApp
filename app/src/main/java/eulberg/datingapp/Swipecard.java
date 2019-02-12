@@ -44,7 +44,7 @@ public class Swipecard {
     private void onResolved(){
         //Glide.with(mContext).load(user.getImageUrl()).into(profileImageView);
         name.setText(user.getUsername()+ "(" + user.getAge() + ")");
-        location.setText("Deutschland");
+        location.setText(user.getCityName());
     }
 
     @SwipeOut
