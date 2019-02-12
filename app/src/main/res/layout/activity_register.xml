@@ -127,7 +127,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="left"
-                        android:src="@drawable/user"
+                        android:src="@drawable/male"
                         app:civ_border_color="@color/white"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
@@ -141,7 +141,7 @@
                         android:id="@+id/female"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/user"
+                        android:src="@drawable/female"
                         app:civ_border_color="@color/white"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
