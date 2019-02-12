@@ -628,7 +628,6 @@ public class ProfileFragment extends Fragment  {
     public void getUserSettings(DataSnapshot dataSnapshot){
         Log.d(TAG, "Retrieving user_settings information from firebase");
 
-
         userSettings = new UserSettings();
 
         for (DataSnapshot ds: dataSnapshot.getChildren()){
@@ -643,9 +642,7 @@ public class ProfileFragment extends Fragment  {
 
             }
         }
-
     }
-
 
     public void setProfileInfo(){
         nameAndAge.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");

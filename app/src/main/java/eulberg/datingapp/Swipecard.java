@@ -31,17 +31,13 @@ public class Swipecard {
     private UserSettings user;
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
+    private String ID;
 
-    /**
-     * Instanziiert ein Swipecards-Objekt
-     * @param context Kontext
-     * @param user User-Settings-Objekt
-     * @param swipeView SwipePlaceHolderView
-     */
-    public Swipecard(Context context, UserSettings user, SwipePlaceHolderView swipeView) {
+    public Swipecard(Context context, UserSettings user, String ID, SwipePlaceHolderView swipeView) {
         mContext = context;
         this.user = user;
         mSwipeView = swipeView;
+        this.ID = ID;
     }
 
     @Resolve
@@ -75,5 +71,9 @@ public class Swipecard {
     @SwipeOutState
     private void onSwipeOutState(){
         Log.d("EVENT", "onSwipeOutState");
+    }
+
+    public String getID(){
+        return ID;
     }
 }

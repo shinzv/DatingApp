@@ -29,6 +29,8 @@ import java.util.List;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static eulberg.datingapp.Register.hashPassword;
+
 public class Login extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -94,23 +96,28 @@ public class Login extends AppCompatActivity {
     }
 
     private void signIn(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in erfolgreich
-                            Log.d(TAG, "sign in erfolgreich");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(Login.this,Home.class);
-                            startActivity(intent);
-                        } else {
-                            //Sign in fehlgeschlagen
-                            Log.w(TAG, "sign in fehlgeschlagen", task.getException());
-                            Toast.makeText(Login.this, "Anmeldung fehlgeschlagen", Toast.LENGTH_SHORT).show();
+        try {
+            mAuth.signInWithEmailAndPassword(email, hashPassword(password))
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in erfolgreich
+                                Log.d(TAG, "sign in erfolgreich");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(Login.this, Home.class);
+                                startActivity(intent);
+                            } else {
+                                //Sign in fehlgeschlagen
+                                Log.w(TAG, "sign in fehlgeschlagen", task.getException());
+                                Toast.makeText(Login.this, "Anmeldung fehlgeschlagen", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
