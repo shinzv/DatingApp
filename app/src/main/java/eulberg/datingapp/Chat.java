@@ -101,7 +101,7 @@ public class Chat extends AppCompatActivity {
                         Glide.with(Chat.this).asBitmap().load(bytes).into(profile_image);
                     }
                 });
-                readMessages(firebaseUser.getUid(), userID,"default");
+                readMessages(firebaseUser.getUid(), userID);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -144,7 +144,7 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    private void readMessages(final String myUserID, final String othersUserID, final String imageurl){
+    private void readMessages(final String myUserID, final String othersUserID){
         messages = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("chats");
@@ -157,7 +157,7 @@ public class Chat extends AppCompatActivity {
                     if(m.getReceiver().equals(myUserID) && m.getSender().equals(othersUserID) || m.getReceiver().equals(othersUserID) && m.getSender().equals(myUserID)){
                         messages.add(m);
                     }
-                    chatAdapter = new ChatAdapter(Chat.this,messages,imageurl);
+                    chatAdapter = new ChatAdapter(Chat.this,messages,othersUserID);
                     messagesRecyclerView.setAdapter(chatAdapter);
                 }
             }

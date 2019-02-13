@@ -7,12 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -25,14 +27,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static final int MSG_TYPE_RIGHT= 1;
     private ArrayList<Message> messages;
     private Context context;
-    private String imageurl;
+    private String userID;
 
     private FirebaseUser firebaseUser;
 
-    public ChatAdapter(Context context, ArrayList<Message> messages, String imageurl) {
+    public ChatAdapter(Context context, ArrayList<Message> messages, String userID) {
         this.messages = messages;
         this.context = context;
-        this.imageurl = imageurl;
+        this.userID = userID;
     }
 
     @NonNull
@@ -54,11 +56,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         Message message = messages.get(i);
         viewHolder.showMessage.setText(message.getMessage());
-        if(imageurl.equals("default")){
-            viewHolder.messageItemImage.setImageResource(R.drawable.peer_avi);
-        }else {
-            //TODO Profilbild laden
-        }
+        //TODO Profilbild laden
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+userID);
+        long megabyte = 1024 * 1024;
+        storageReference.getBytes(megabyte).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Glide.with(context).asBitmap().load(bytes).into(viewHolder.messageItemImage);
+            }
+        });
     }
 
     @Override
