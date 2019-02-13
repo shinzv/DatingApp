@@ -18,6 +18,12 @@ android {
     }
 }
 
+//IronSource
+repositories {
+    maven {
+        url "https://dl.bintray.com/ironsource-mobile/android-sdk"
+    }
+}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -47,7 +53,8 @@ dependencies {
     //Swipecards
     implementation 'com.mindorks:placeholderview:0.7.1'
     implementation 'com.google.code.gson:gson:2.8.2'
-
+    //IronSource
+    implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar'
 
 
 }

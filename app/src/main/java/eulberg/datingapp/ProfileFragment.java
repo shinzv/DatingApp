@@ -227,7 +227,8 @@ public class ProfileFragment extends Fragment  {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(uriImg);
             editor.apply();
-            //TODO Ursprungsbild muss direkt angezeigt werden und nicht erst wenn man das Fragment switcht
+            //TODO Ursprungsbild muss direkt angezeigt werden und nicht erst wenn man das Fragment switcht -> checked!
+            profilePicture.setImageResource(R.drawable.peer_avi);
             Toast.makeText(getContext(), "Bild entfernt", Toast.LENGTH_LONG).show();
         }catch (NullPointerException n){
             Toast.makeText(getContext(), "Kein Bild ausgewählt", Toast.LENGTH_LONG).show();
@@ -353,8 +354,8 @@ public class ProfileFragment extends Fragment  {
             progressDialog.show();
 
             //Es wird unter dem Verzeichnis "ProfilePictures/ " userId abgespeichert um jeden user sein Profilbild zuzuordnen.
-            StorageReference ref = storageReference.child("ProfilePictures/" + userID );
-            ref.putFile(imageURI)
+
+            storageReference.child("ProfilePictures/" + userID ).putFile(imageURI)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -595,6 +596,8 @@ public class ProfileFragment extends Fragment  {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
         userID = mAuth.getCurrentUser().getUid();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

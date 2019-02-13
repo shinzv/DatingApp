@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -19,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -31,6 +33,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.ironsource.adapters.supersonicads.SupersonicConfig;
+import com.ironsource.mediationsdk.IronSource;
+import com.ironsource.mediationsdk.integration.IntegrationHelper;
+import com.ironsource.mediationsdk.logger.IronSourceError;
+import com.ironsource.mediationsdk.sdk.InterstitialListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +45,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Home extends AppCompatActivity {
+public class Home extends AppCompatActivity implements InterstitialListener {
 
     //Referenzen
     private LocationManager locationManager;
@@ -60,6 +67,10 @@ public class Home extends AppCompatActivity {
     private String userID;
 
     private UserSettings userSettings;
+
+    //IronSource
+    private final String APP_KEY = "88c7a19d";
+    private boolean stopAds = true;
 
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
@@ -152,6 +163,30 @@ public class Home extends AppCompatActivity {
                 }
             };
         }
+
+        if(!stopAds) {
+            IronSource.setInterstitialListener(this);
+            /**
+             *Ad Units should be in the type of IronSource.Ad_Unit.AdUnitName, example
+             */
+            IronSource.init(this, APP_KEY, IronSource.AD_UNIT.INTERSTITIAL);
+
+            IntegrationHelper.validateIntegration(this);
+            IronSource.getAdvertiserId(Home.this);
+
+            //show the interstitial
+            IronSource.loadInterstitial();
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    IronSource.showInterstitial();
+                }
+            }, 5000);
+        }
+
+
+
     }
 
     /**
@@ -255,6 +290,7 @@ public class Home extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        IronSource.onResume(this);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -268,10 +304,60 @@ public class Home extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, 5000);
+        }, 10000);
 
     }
 
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * IronSource.onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        IronSource.onPause(this);
+    }
 
+
+    //
+    //InterStitial Listener: START
+    //
+    @Override
+    public void onInterstitialAdReady() {
+
+    }
+
+    @Override
+    public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
+
+    }
+
+    @Override
+    public void onInterstitialAdOpened() {
+
+    }
+
+    @Override
+    public void onInterstitialAdClosed() {
+
+    }
+
+    @Override
+    public void onInterstitialAdShowSucceeded() {
+
+    }
+
+    @Override
+    public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
+
+    }
+
+    @Override
+    public void onInterstitialAdClicked() {
+
+    }
+    //
+    //InterStitial Listener: END
+    //
 
 }
