@@ -197,7 +197,7 @@ public class DiscoverFragment extends Fragment {
     }
 
     public void getPotentialMatches(){
-        //Query potentialMatches = userSettingsReference.orderByChild("gender").equalTo(genderToSearchFor);
+        Query potentialMatches = userSettingsReference.orderByChild("gender").equalTo(genderToSearchFor);
 
         userSettingsReference.addValueEventListener(new ValueEventListener() {
             @Override
