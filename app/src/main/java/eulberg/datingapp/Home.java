@@ -70,7 +70,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
 
     //IronSource
     private final String APP_KEY = "88c7a19d";
-    private final String FALLBACK_USER_ID = "userId";
+    private boolean stopAds = true;
 
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
@@ -164,49 +164,15 @@ public class Home extends AppCompatActivity implements InterstitialListener {
             };
         }
 
-        IronSource.setInterstitialListener(new InterstitialListener() {
-            @Override
-            public void onInterstitialAdReady() {
+        if(!stopAds) {
+            IronSource.setInterstitialListener(this);
+            /**
+             *Ad Units should be in the type of IronSource.Ad_Unit.AdUnitName, example
+             */
+            IronSource.init(this, APP_KEY, IronSource.AD_UNIT.INTERSTITIAL);
 
-            }
-
-            @Override
-            public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
-
-            }
-
-            @Override
-            public void onInterstitialAdOpened() {
-
-            }
-
-            @Override
-            public void onInterstitialAdClosed() {
-
-            }
-
-            @Override
-            public void onInterstitialAdShowSucceeded() {
-
-            }
-
-            @Override
-            public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
-
-            }
-
-            @Override
-            public void onInterstitialAdClicked() {
-
-            }
-        });
-        /**
-         *Ad Units should be in the type of IronSource.Ad_Unit.AdUnitName, example
-         */
-        IronSource.init(this, APP_KEY, IronSource.AD_UNIT.INTERSTITIAL);
-
-        IntegrationHelper.validateIntegration(this);
-        IronSource.getAdvertiserId(Home.this);
+            IntegrationHelper.validateIntegration(this);
+            IronSource.getAdvertiserId(Home.this);
 
             //show the interstitial
             IronSource.loadInterstitial();
@@ -217,6 +183,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
                     IronSource.showInterstitial();
                 }
             }, 5000);
+        }
 
 
 
