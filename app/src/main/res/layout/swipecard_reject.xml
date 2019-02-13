@@ -10,6 +10,6 @@
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_margin="30dp"
-        app:srcCompat="@drawable/person_pink" />
+        android:layout_margin="20dp"
+        app:srcCompat="@drawable/ic_decline" />
 </LinearLayout>
