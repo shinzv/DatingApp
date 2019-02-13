@@ -14,6 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -39,12 +45,13 @@ public class ChatFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
-        initImageBitmaps();
+        initChatUser();
     }
 
-    private void initImageBitmaps() {
-        chatUserIDs.clear();
-        chatUserIDs.add("2vbbAIacxmfe1vRx1FnWNeMH5cD2");
+    private void initChatUser() {
+        //chatUserIDs.clear();
+        //chatUserIDs.add("bAf87RDMF7cUzYR54ocJ1qqhHsG2");
+        loadChatUser();
         initRecyclerView();
     }
 
@@ -69,5 +76,27 @@ public class ChatFragment extends Fragment {
             connected = true;
         }
         return connected;
+    }
+
+    private void loadChatUser(){
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatUserIDs.clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    User user= snapshot.getValue(User.class);
+                    if (!user.getUser_id().equals(firebaseUser.getUid())) {
+                        chatUserIDs.add(user.getUser_id());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
