@@ -142,25 +142,12 @@ public class DiscoverFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference();
         userID = mAuth.getCurrentUser().getUid();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                //Wenn User eingeloggt
-                if (user != null) {
-                    userID = mAuth.getCurrentUser().getUid();
-                } else {
-
-                }
-            }
-        };
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //retrieving data
                 getUserSettings(dataSnapshot);
                 mSwipeView.addView(new Swipecard(mContext, userSettings, userID, mSwipeView));
-                setGenderToSearchFor();
             }
 
             @Override
@@ -179,6 +166,7 @@ public class DiscoverFragment extends Fragment {
                 Log.d(TAG, "Datasnapshot: " + ds);
                 try {
                     userSettings = ds.child(userID).getValue(UserSettings.class);
+                    setGenderToSearchFor();
                 }catch(NullPointerException e){
                     Log.d(TAG, "Error occurred loading data: " + e.getMessage());
                 }
@@ -188,7 +176,7 @@ public class DiscoverFragment extends Fragment {
     }
 
     public void setGenderToSearchFor(){
-        if(userSettings.getGender() == "male"){
+        if(userSettings.getGender().equals("male")){
             genderToSearchFor = "female";
         }else{
             genderToSearchFor = "male";

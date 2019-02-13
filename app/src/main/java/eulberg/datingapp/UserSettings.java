@@ -18,7 +18,6 @@ public class UserSettings implements Serializable {
         this.description = description;
         this.gender = gender;
         this.username = username;
-        //this.phoneNumber = phoneNumber;
     }
 
     public UserSettings() {
