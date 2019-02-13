@@ -55,6 +55,7 @@ public class DiscoverFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mSwipeView = (SwipePlaceHolderView)getView().findViewById(R.id.swipeView);
         mContext = getContext();
+        genderToSearchFor = "male";
 
         //Legt Werte der Swipecards fest
         mSwipeView.getBuilder()
@@ -68,6 +69,7 @@ public class DiscoverFragment extends Fragment {
         //Firebase Authentifikation
         fireBaseAuth();
 
+        /*
         //Erstellt einen ValueEventListener für die Abfrage der Daten bezüglich der Swipecards
         valueEventListener = new ValueEventListener() {
             @Override
@@ -93,18 +95,11 @@ public class DiscoverFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError){
             }
         };
+        */
 
         userSettingsReference = firebaseDatabase.getInstance().getReference().child("user_settings");
+
         getPotentialMatches();
-
-        /*
-        Query query = FirebaseDatabase.getInstance().getReference("user_settings")
-                .orderByChild("gender")
-                .equalTo("male")
-                .limitToFirst(10);
-
-        query.addListenerForSingleValueEvent(valueEventListener);
-        */
 
         //Buttons zum liken oder ablehnen
         getView().findViewById(R.id.reject_button).setOnClickListener(new View.OnClickListener() {
@@ -147,7 +142,6 @@ public class DiscoverFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //retrieving data
                 getUserSettings(dataSnapshot);
-                mSwipeView.addView(new Swipecard(mContext, userSettings, userID, mSwipeView));
             }
 
             @Override
@@ -185,7 +179,7 @@ public class DiscoverFragment extends Fragment {
 
     public void getPotentialMatches(){
         Log.d(TAG, genderToSearchFor);
-        Query potentialMatches = userSettingsReference.orderByChild("gender").equalTo(genderToSearchFor);
+        Query potentialMatches = userSettingsReference.orderByChild("gender").startAt(genderToSearchFor).endAt(genderToSearchFor);
 
         potentialMatches.addValueEventListener(new ValueEventListener() {
             @Override
@@ -199,7 +193,7 @@ public class DiscoverFragment extends Fragment {
                         mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
                     }
                 }else{
-                    Log.d(TAG, "ES EXISTIERT KEIN SNAPSHOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Log.d(TAG, "Snapshot doesn't exist");
                 }
             }
             @Override
