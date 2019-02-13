@@ -100,7 +100,7 @@
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@+id/messageImage"
             android:text="User"
-            android:textColor="#000"
+            android:textColor="#fff"
             android:textSize="22sp" />
 
     </RelativeLayout>
