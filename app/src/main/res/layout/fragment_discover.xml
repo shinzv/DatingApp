@@ -19,15 +19,16 @@
             android:id="@+id/reject_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/person_pink" />
+            android:background="@drawable/ic_decline" />
 
         <ImageButton
             android:id="@+id/accept_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="50dp"
-            android:background="@drawable/phone_number" />
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/ic_accept" />
     </LinearLayout>
+
     <com.mindorks.placeholderview.SwipePlaceHolderView
         android:id="@+id/swipeView"
         android:layout_width="match_parent"
