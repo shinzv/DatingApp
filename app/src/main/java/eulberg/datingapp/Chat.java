@@ -121,6 +121,12 @@ public class Chat extends AppCompatActivity {
                 message.setText("");
             }
         });
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Chat.this,DisplayProfile.class));
+            }
+        });
     }
 
     private void sendMessage(String sender, String receiver,String message){
