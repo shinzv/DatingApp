@@ -159,7 +159,6 @@ public class DiscoverFragment extends Fragment {
                 }
             }
         };
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -182,7 +181,6 @@ public class DiscoverFragment extends Fragment {
         for (DataSnapshot ds: dataSnapshot.getChildren()){
             if(ds.getKey().equals("user_settings")){
                 Log.d(TAG, "Datasnapshot: " + ds);
-
                 try {
                     userSettings = ds.child(userID).getValue(UserSettings.class);
                 }catch(NullPointerException e){
