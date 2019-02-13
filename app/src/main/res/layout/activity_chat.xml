@@ -90,7 +90,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="70dp"
-            android:src="@drawable/user" />
+            android:src="@drawable/peer_avi" />
 
         <TextView
             android:id="@+id/messageUsername"

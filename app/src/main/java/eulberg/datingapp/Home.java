@@ -304,7 +304,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
                     e.printStackTrace();
                 }
             }
-        }, 5000);
+        }, 10000);
 
     }
 
