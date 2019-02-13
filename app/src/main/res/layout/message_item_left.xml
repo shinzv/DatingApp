@@ -19,7 +19,8 @@
         android:background="@drawable/message_background_left"
         android:text="Message"
         android:padding="8dp"
-        />
+        android:id="@+id/showMessage"
+        android:textSize="18sp"/>
 
 
 
