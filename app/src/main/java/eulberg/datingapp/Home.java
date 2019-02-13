@@ -85,7 +85,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
         BottomNavigationView nav = findViewById(R.id.navigation_bar);
         nav.setOnNavigationItemSelectedListener(navListener);
         //Default fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, chatFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, profileFragment).commit();
 
 
         checkIfGPSIsEnabled();
