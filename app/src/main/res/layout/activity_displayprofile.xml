@@ -23,7 +23,7 @@
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_picture"
+            android:id="@+id/displayprofileImage"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center"
@@ -34,24 +34,23 @@
             app:civ_border_width="2dp" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/displayprofileNameAndAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="50dp"
             android:foregroundGravity="bottom"
-            android:text="User"
+            android:text="User (age)"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="26sp"
-            />
+            android:textSize="26sp" />
 
         <TextView
-            android:id="@+id/description"
+            android:id="@+id/displayprofileDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:singleLine="false"/>
+            android:singleLine="false"
+            android:text="Description" />
 
 
     </LinearLayout>

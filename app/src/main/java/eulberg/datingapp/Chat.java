@@ -101,7 +101,7 @@ public class Chat extends AppCompatActivity {
                         Glide.with(Chat.this).asBitmap().load(bytes).into(profile_image);
                     }
                 });
-                readMessages(firebaseUser.getUid(),userID,"default");
+                readMessages(firebaseUser.getUid(), userID,"default");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -124,7 +124,9 @@ public class Chat extends AppCompatActivity {
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Chat.this,DisplayProfile.class));
+                Intent displayProfile = new Intent(Chat.this,DisplayProfile.class);
+                displayProfile.putExtra("userID",userID);
+                startActivity(displayProfile);
             }
         });
     }
