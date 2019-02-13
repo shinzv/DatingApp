@@ -79,6 +79,7 @@ public class DiscoverFragment extends Fragment {
                             try {
                                 UserSettings user = ds.getValue(UserSettings.class);
                                 String ID = ds.getChildren().toString();
+                                Log.d(TAG, user.getUsername());
                                 mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
                             } catch (NullPointerException e) {
                                 Log.d(TAG, "Error occurred loading data: " + e.getMessage());
@@ -93,12 +94,18 @@ public class DiscoverFragment extends Fragment {
             }
         };
 
+        userSettingsReference = firebaseDatabase.getInstance().getReference().child("user_settings");
+
+        getPotentialMatches();
+
+        /*
         Query query = FirebaseDatabase.getInstance().getReference("user_settings")
                 .orderByChild("gender")
-                .equalTo(genderToSearchFor)
+                .equalTo("male")
                 .limitToFirst(10);
 
         query.addListenerForSingleValueEvent(valueEventListener);
+        */
 
         //Buttons zum liken oder ablehnen
         getView().findViewById(R.id.reject_button).setOnClickListener(new View.OnClickListener() {
@@ -187,5 +194,30 @@ public class DiscoverFragment extends Fragment {
         }else{
             genderToSearchFor = "male";
         }
+    }
+
+    public void getPotentialMatches(){
+        //Query potentialMatches = userSettingsReference.orderByChild("gender").equalTo(genderToSearchFor);
+
+        userSettingsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+                    for (DataSnapshot ds : users){
+                        UserSettings user = ds.getValue(UserSettings.class);
+                        String ID = ds.toString();
+                        Log.d(TAG, user.getUsername() +", " + ID);
+                        mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
+                    }
+                }else{
+                    Log.d(TAG, "ES EXISTIERT KEIN SNAPSHOT");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
