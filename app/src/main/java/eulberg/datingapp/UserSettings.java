@@ -8,7 +8,7 @@ public class UserSettings implements Serializable {
     private String description;
     private String gender;
     private String username;
-    private String cityName;
+    private String city;
     //private double latitude;
     //private double longtitude;
     // private String phoneNumber;
@@ -78,12 +78,12 @@ public class UserSettings implements Serializable {
                 '}';
     }
 
-    public String getCityName() {
-        return cityName;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     /*public double getLatitude() {

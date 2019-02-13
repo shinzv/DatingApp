@@ -44,7 +44,7 @@ public class ChatFragment extends Fragment {
 
     private void initImageBitmaps() {
         chatUserIDs.clear();
-        chatUserIDs.add("PXzYZ0u4IPX7jJfT9SrMdmqaeXU2");
+        chatUserIDs.add("2vbbAIacxmfe1vRx1FnWNeMH5cD2");
         initRecyclerView();
     }
 

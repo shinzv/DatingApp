@@ -62,7 +62,6 @@ public class ChatFragmentAdapter extends RecyclerView.Adapter<ChatFragmentAdapte
                         Glide.with(context).asBitmap().load(bytes).into(viewHolder.chatImage);
                     }
                 });
-
             }
 
             @Override

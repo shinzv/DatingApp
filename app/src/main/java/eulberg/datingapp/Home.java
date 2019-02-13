@@ -132,10 +132,10 @@ public class Home extends AppCompatActivity implements InterstitialListener {
             listener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    Log.d(TAG, "onLocationChanged()");
+                    //Log.d(TAG, "onLocationChanged()");
                     if (location != null) {
                         String s = "Breite: " + location.getLatitude() + "\nLänge: " + location.getLongitude();
-                        Log.d(TAG, s);
+                        //Log.d(TAG, s);
                         Geocoder geocoder = new Geocoder(Home.this, Locale.getDefault());
                         try {
                             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,6 +20,8 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 
 @Layout(R.layout.swipecard)
 public class Swipecard {
+
+    private static final String TAG = DiscoverFragment.class.getSimpleName();
 
     @View(R.id.profileImageView)
     private ImageView profileImageView;
@@ -41,13 +42,16 @@ public class Swipecard {
         this.user = user;
         mSwipeView = swipeView;
         this.ID = ID;
+        onResolved();
     }
 
     @Resolve
     private void onResolved(){
         //Glide.with(mContext).load(user.getImageUrl()).into(profileImageView);
+        loadImage();
         name.setText(user.getUsername()+ "(" + user.getAge() + ")");
-        location.setText(user.getCityName());
+        location.setText(user.getCity());
+        Log.d(TAG, "Swipecard created with ID: " + ID);
     }
 
     @SwipeOut

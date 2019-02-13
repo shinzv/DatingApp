@@ -27,7 +27,7 @@ import com.mindorks.placeholderview.Utils;
 
 public class DiscoverFragment extends Fragment {
 
-    private static final String TAG = ProfileFragment.class.getSimpleName();
+    private static final String TAG = DiscoverFragment.class.getSimpleName();
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
 
@@ -67,11 +67,6 @@ public class DiscoverFragment extends Fragment {
 
         //Firebase Authentifikation
         fireBaseAuth();
-        if(userSettings.getGender() == "male"){
-            genderToSearchFor = "female";
-        }else{
-            genderToSearchFor = "male";
-        }
 
         //Erstellt einen ValueEventListener für die Abfrage der Daten bezüglich der Swipecards
         valueEventListener = new ValueEventListener() {
@@ -82,9 +77,9 @@ public class DiscoverFragment extends Fragment {
                         if (ds.getKey().equals("user_settings")) {
                             Log.d(TAG, "Datasnapshot: " + ds);
                             try {
-                                userSettings = ds.getValue(UserSettings.class);
+                                UserSettings user = ds.getValue(UserSettings.class);
                                 String ID = ds.getChildren().toString();
-                                mSwipeView.addView(new Swipecard(mContext, userSettings, ID, mSwipeView));
+                                mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
                             } catch (NullPointerException e) {
                                 Log.d(TAG, "Error occurred loading data: " + e.getMessage());
                             }
@@ -101,9 +96,6 @@ public class DiscoverFragment extends Fragment {
         Query query = FirebaseDatabase.getInstance().getReference("user_settings")
                 .orderByChild("gender")
                 .equalTo(genderToSearchFor)
-                .orderByChild("age")
-                .startAt(userSettings.getAge()-5)
-                .endAt(userSettings.getAge()+5)
                 .limitToFirst(10);
 
         query.addListenerForSingleValueEvent(valueEventListener);
@@ -142,7 +134,6 @@ public class DiscoverFragment extends Fragment {
     }
 
     public void fireBaseAuth() {
-
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference();
@@ -164,6 +155,7 @@ public class DiscoverFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //retrieving data
                 getUserSettings(dataSnapshot);
+                setGenderToSearchFor();
             }
 
             @Override
@@ -176,7 +168,6 @@ public class DiscoverFragment extends Fragment {
 
     public void getUserSettings(DataSnapshot dataSnapshot){
         Log.d(TAG, "Retrieving user_settings information from firebase");
-
         userSettings = new UserSettings();
         for (DataSnapshot ds: dataSnapshot.getChildren()){
             if(ds.getKey().equals("user_settings")){
@@ -191,6 +182,11 @@ public class DiscoverFragment extends Fragment {
         }
     }
 
-
-
+    public void setGenderToSearchFor(){
+        if(userSettings.getGender() == "male"){
+            genderToSearchFor = "female";
+        }else{
+            genderToSearchFor = "male";
+        }
+    }
 }
