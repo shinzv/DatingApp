@@ -95,7 +95,6 @@ public class DiscoverFragment extends Fragment {
         };
 
         userSettingsReference = firebaseDatabase.getInstance().getReference().child("user_settings");
-
         getPotentialMatches();
 
         /*
@@ -160,8 +159,8 @@ public class DiscoverFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //retrieving data
                 getUserSettings(dataSnapshot);
-                setGenderToSearchFor();
                 mSwipeView.addView(new Swipecard(mContext, userSettings, userID, mSwipeView));
+                setGenderToSearchFor();
             }
 
             @Override
@@ -197,21 +196,22 @@ public class DiscoverFragment extends Fragment {
     }
 
     public void getPotentialMatches(){
+        Log.d(TAG, genderToSearchFor);
         Query potentialMatches = userSettingsReference.orderByChild("gender").equalTo(genderToSearchFor);
 
-        userSettingsReference.addValueEventListener(new ValueEventListener() {
+        potentialMatches.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                     for (DataSnapshot ds : users){
                         UserSettings user = ds.getValue(UserSettings.class);
-                        String ID = ds.toString();
+                        String ID = ds.getKey();
                         Log.d(TAG, user.getUsername() +", " + ID);
                         mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
                     }
                 }else{
-                    Log.d(TAG, "ES EXISTIERT KEIN SNAPSHOT");
+                    Log.d(TAG, "ES EXISTIERT KEIN SNAPSHOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
             @Override

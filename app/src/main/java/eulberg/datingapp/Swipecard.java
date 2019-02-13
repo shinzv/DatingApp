@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Layout;
@@ -84,13 +85,17 @@ public class Swipecard {
     }
 
     private void loadImage(){
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+ID);
-        long megabyte = 1024 * 1024;
-        storageReference.getBytes(megabyte).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Glide.with(mContext).asBitmap().load(bytes).into(profileImageView);
-            }
-        });
+        try {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/" + ID);
+            long megabyte = 1024 * 1024;
+            storageReference.getBytes(megabyte).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Glide.with(mContext).asBitmap().load(bytes).into(profileImageView);
+                }
+            });
+        }catch(Exception e){
+            Log.d(TAG, "Couldn't load image" + ID);
+        }
     }
 }
