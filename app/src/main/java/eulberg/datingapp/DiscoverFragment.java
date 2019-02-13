@@ -100,8 +100,6 @@ public class DiscoverFragment extends Fragment {
 
         query.addListenerForSingleValueEvent(valueEventListener);
 
-        //mSwipeView.addView(new Swipecard(mContext, userSettings, mSwipeView));
-
         //Buttons zum liken oder ablehnen
         getView().findViewById(R.id.reject_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +154,7 @@ public class DiscoverFragment extends Fragment {
                 //retrieving data
                 getUserSettings(dataSnapshot);
                 setGenderToSearchFor();
+                mSwipeView.addView(new Swipecard(mContext, userSettings, userID, mSwipeView));
             }
 
             @Override

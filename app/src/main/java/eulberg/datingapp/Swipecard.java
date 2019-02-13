@@ -42,7 +42,6 @@ public class Swipecard {
         this.user = user;
         mSwipeView = swipeView;
         this.ID = ID;
-        onResolved();
     }
 
     @Resolve
