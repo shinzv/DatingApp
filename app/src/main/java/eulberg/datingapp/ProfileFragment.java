@@ -101,17 +101,24 @@ public class ProfileFragment extends Fragment  {
 
     public static final String uriImg= "URI";
 
-
-
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * inflates the fragment profile
+     * @param savedInstanceState
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
-
     }
 
     //TODO ProfileFragment schließt sobald onCreate drin ist
     //Solved by Haydar: OnCreateView -> OnCreate bei Fragments bedeutet: findViewById darf noch nicht angewendet werden, returnt NULL!
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -220,6 +227,9 @@ public class ProfileFragment extends Fragment  {
         startActivityForResult(intent, IMAGE_CAPTURE);
     }
 
+    /**
+     * Löscht das Bild aus der Datenbank, den SharedPrefs und der profile picture view
+     */
     private void removePicture() {
         try {
             storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
@@ -265,7 +275,7 @@ public class ProfileFragment extends Fragment  {
 
                     saveProfilePicture();
                 }catch (IOException e) { //und FileNotFoundException
-
+                    e.printStackTrace();
                 }
             }else{
                 int rowsDeleted = getActivity().getContentResolver().delete(imageURI, null, null);
@@ -419,6 +429,7 @@ public class ProfileFragment extends Fragment  {
                 e.printStackTrace();
             }
         } else {
+            /*
             //Wenn kein Bild in den Prefs existiert, dann downloade es vom Server.
             FirebaseStorage localStorage = FirebaseStorage.getInstance();
             // Create a reference to a file from a Google Cloud Storage URI
@@ -441,7 +452,7 @@ public class ProfileFragment extends Fragment  {
                 public void onFailure(@NonNull Exception e) {
                     e.printStackTrace();
                 }
-            });
+            });*/
 
             /*ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -521,6 +532,11 @@ public class ProfileFragment extends Fragment  {
 
     }
 
+    /**
+     * Speichert das heruntergeladene Bild ab.
+     * @param bytes sind die heruntergerladenen bytes des Bildes.
+     * @return Uri des gepeicherten Bildes.
+     */
     private Uri saveImage (byte[] bytes) {
         Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
@@ -579,6 +595,10 @@ public class ProfileFragment extends Fragment  {
         */
     }
 
+    /**
+     * Fügt das Bild zur Galerie App hinzu.
+     * @param imagePath path zum Bild.
+     */
     private void addPictureToSystemGallery(String imagePath){
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(imagePath);
@@ -591,6 +611,9 @@ public class ProfileFragment extends Fragment  {
         }
     }
 
+    /**
+     * Initialisiert die Variablen, die etwas mit Firebase zu tun haben.
+     */
     public void fireBaseAuth() {
 
         mAuth = FirebaseAuth.getInstance();
@@ -628,6 +651,10 @@ public class ProfileFragment extends Fragment  {
 
     }
 
+    /**
+     * speichert die heruntergeladenen Daten in einem UserSettingsobjekt ab.
+     * @param dataSnapshot heruntergeladene Daten
+     */
     public void getUserSettings(DataSnapshot dataSnapshot){
         Log.d(TAG, "Retrieving user_settings information from firebase");
 
@@ -646,6 +673,9 @@ public class ProfileFragment extends Fragment  {
         }
     }
 
+    /**
+     * Setzt den Namen und das Alter in den
+     */
     public void setProfileInfo(){
         nameAndAge.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");
     }
