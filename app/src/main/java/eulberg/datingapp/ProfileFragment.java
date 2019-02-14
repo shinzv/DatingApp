@@ -101,7 +101,6 @@ public class ProfileFragment extends Fragment  {
 
     public static final String uriImg= "URI";
 
-
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
      * inflates the fragment profile
@@ -111,7 +110,6 @@ public class ProfileFragment extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
-
     }
 
     //TODO ProfileFragment schließt sobald onCreate drin ist
@@ -277,7 +275,7 @@ public class ProfileFragment extends Fragment  {
 
                     saveProfilePicture();
                 }catch (IOException e) { //und FileNotFoundException
-
+                    e.printStackTrace();
                 }
             }else{
                 int rowsDeleted = getActivity().getContentResolver().delete(imageURI, null, null);
@@ -431,6 +429,7 @@ public class ProfileFragment extends Fragment  {
                 e.printStackTrace();
             }
         } else {
+            /*
             //Wenn kein Bild in den Prefs existiert, dann downloade es vom Server.
             FirebaseStorage localStorage = FirebaseStorage.getInstance();
             // Create a reference to a file from a Google Cloud Storage URI
@@ -453,7 +452,7 @@ public class ProfileFragment extends Fragment  {
                 public void onFailure(@NonNull Exception e) {
                     e.printStackTrace();
                 }
-            });
+            });*/
 
             /*ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override

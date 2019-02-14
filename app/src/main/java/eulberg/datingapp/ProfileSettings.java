@@ -57,7 +57,9 @@ public class ProfileSettings extends AppCompatActivity {
                 mAuth.signOut();
                 SharedPreferences sharedPreferences = getSharedPreferences("SharedPrefs",MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
-                //TODO für Haydar: Settings-File löschen
+                //Lösche das Profilbild in der Storage.
+                storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
+
             }
         });
 
