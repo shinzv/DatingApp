@@ -114,7 +114,7 @@ public class Chat extends AppCompatActivity {
             public void onClick(View v) {
                 String msg = message.getText().toString();
                 if(messageIsValid(msg)){
-                    sendMessage(firebaseUser.getUid(),userID,msg);
+                    sendMessage(firebaseUser.getUid(),userID,removeUnnecessarySpacesAndBreaks(msg));
                 }else{
                     Toast.makeText(Chat.this,"Tippe eine Nachricht ein",Toast.LENGTH_SHORT).show();
                 }
@@ -129,6 +129,17 @@ public class Chat extends AppCompatActivity {
                 startActivity(displayProfile);
             }
         });
+    }
+
+    private String removeUnnecessarySpacesAndBreaks(String message) {
+        while(message.startsWith(" ") || message.startsWith("\n") || message.endsWith(" ") || message.endsWith("\n")){
+            if (message.startsWith(" ") || message.startsWith("\n")) {
+                message = message.substring(1);
+            }else if (message.endsWith(" ") || message.endsWith("\n")){
+                message = message.substring(0,message.length()-1);
+            }
+        }
+        return message;
     }
 
     private boolean messageIsValid(String message) {
