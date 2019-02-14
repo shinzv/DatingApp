@@ -35,6 +35,11 @@ public class EditProfile extends AppCompatActivity {
 
     private static final String TAG = ProfileSettings.class.getSimpleName();
 
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -72,6 +77,9 @@ public class EditProfile extends AppCompatActivity {
 
     }
 
+    /**
+     * Setzt einen ValueEventlistener auf die Datenbankreferenz und iniziiert den DownloadVorggang der User/UserSettings-Daten
+     */
     private void load(){
 
 

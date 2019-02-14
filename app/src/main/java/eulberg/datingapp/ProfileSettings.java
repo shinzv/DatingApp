@@ -24,6 +24,8 @@ import java.io.IOException;
 
 
 public class ProfileSettings extends AppCompatActivity {
+
+    //Referenzen
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase firebaseDatabase;
@@ -31,6 +33,11 @@ public class ProfileSettings extends AppCompatActivity {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
