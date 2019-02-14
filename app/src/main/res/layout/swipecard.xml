@@ -19,7 +19,8 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="75dp"/>
+            android:src="@drawable/peer_avi"
+            android:layout_marginBottom="75dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="75dp"

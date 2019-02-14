@@ -7,7 +7,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/profileBackground"
+        android:id="@+id/displayProfileBackground"
         android:layout_width="match_parent"
         android:layout_height="340dp"
         android:background="@drawable/gradient_list"
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="35dp"
             android:foregroundGravity="bottom"
             android:text="User (age)"
             android:textAlignment="center"
@@ -46,10 +46,25 @@
             android:textSize="26sp" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/pink"
+            android:textSize="22dp"
+            android:text="About me" />
+
+
+        <TextView
             android:id="@+id/displayprofileDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="false"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textSize="16dp"
             android:text="Description" />
 
 

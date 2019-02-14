@@ -1,11 +1,13 @@
 package eulberg.datingapp;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -43,6 +45,12 @@ public class DisplayProfile extends AppCompatActivity {
 
         userID = getIntent().getStringExtra("userID");
 
+        //Animiert den  Hintergrund des Profilbildes
+        RelativeLayout profile = findViewById(R.id.displayProfileBackground);
+        AnimationDrawable animationDrawable = (AnimationDrawable) profile.getBackground();
+        animationDrawable.setEnterFadeDuration(1000);
+        animationDrawable.setExitFadeDuration(3000);
+        animationDrawable.start();
 
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+userID);
