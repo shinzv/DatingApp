@@ -2,6 +2,7 @@ package eulberg.datingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -73,6 +74,8 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 gender = "male";
+                male.setBorderColor(Color.parseColor("#48dbfb"));
+                female.setBorderColor(Color.WHITE);
             }
         });
 
@@ -80,6 +83,8 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 gender = "female";
+                female.setBorderColor(getResources().getColor(R.color.pink));
+                male.setBorderColor(Color.WHITE);
             }
         });
 
