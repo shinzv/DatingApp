@@ -25,6 +25,8 @@ import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.Utils;
 
+import java.util.ArrayList;
+
 public class DiscoverFragment extends Fragment {
 
     private static final String TAG = DiscoverFragment.class.getSimpleName();
@@ -43,6 +45,9 @@ public class DiscoverFragment extends Fragment {
     private UserSettings userSettings;
     private String userID;
     private String genderToSearchFor;
+
+    //Matching
+    private ArrayList<LikedUser> likedUsers;
 
     @Nullable
     @Override
@@ -69,36 +74,9 @@ public class DiscoverFragment extends Fragment {
         //Firebase Authentifikation
         fireBaseAuth();
 
-        /*
-        //Erstellt einen ValueEventListener für die Abfrage der Daten bezüglich der Swipecards
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.getKey().equals("user_settings")) {
-                            Log.d(TAG, "Datasnapshot: " + ds);
-                            try {
-                                UserSettings user = ds.getValue(UserSettings.class);
-                                String ID = ds.getChildren().toString();
-                                Log.d(TAG, user.getUsername());
-                                mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
-                            } catch (NullPointerException e) {
-                                Log.d(TAG, "Error occurred loading data: " + e.getMessage());
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError){
-            }
-        };
-        */
-
         userSettingsReference = firebaseDatabase.getInstance().getReference().child("user_settings");
 
+        getLikes();
         getPotentialMatches();
 
         //Buttons zum liken oder ablehnen
@@ -153,7 +131,7 @@ public class DiscoverFragment extends Fragment {
     }
 
     public void getUserSettings(DataSnapshot dataSnapshot){
-        Log.d(TAG, "Retrieving user_settings information from firebase");
+        Log.d(TAG, "Retrieving user_settings information from Firebase");
         userSettings = new UserSettings();
         for (DataSnapshot ds: dataSnapshot.getChildren()){
             if(ds.getKey().equals("user_settings")){
@@ -169,6 +147,25 @@ public class DiscoverFragment extends Fragment {
         }
     }
 
+    public void getLikes(){
+        Log.d(TAG, "Retrieving liked users from Firebase");
+        likedUsers = new ArrayList<>();
+        Query liked = reference.child("likes").child(userID).orderByChild("ID");
+        liked.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    LikedUser likedUser = snapshot.getValue(LikedUser.class);
+                    likedUsers.add(likedUser);
+                    Log.d(TAG, likedUsers.get(0).getLikedUserID());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
     public void setGenderToSearchFor(){
         if(userSettings.getGender().equals("male")){
             genderToSearchFor = "female";
@@ -178,7 +175,6 @@ public class DiscoverFragment extends Fragment {
     }
 
     public void getPotentialMatches(){
-        Log.d(TAG, genderToSearchFor);
         Query potentialMatches = userSettingsReference.orderByChild("gender").startAt(genderToSearchFor).endAt(genderToSearchFor);
 
         potentialMatches.addValueEventListener(new ValueEventListener() {
@@ -187,10 +183,15 @@ public class DiscoverFragment extends Fragment {
                 if (dataSnapshot.exists()) {
                     Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                     for (DataSnapshot ds : users){
+                        boolean notLiked = true;
                         UserSettings user = ds.getValue(UserSettings.class);
                         String ID = ds.getKey();
-                        Log.d(TAG, user.getUsername() +", " + ID);
-                        mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
+                        for (int i = 0; i < likedUsers.size() && notLiked; i++) {
+                            if(likedUsers.get(i).getLikedUserID().equals(ID)){ notLiked = false; }
+                        }
+                        if(notLiked) {
+                            mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));
+                        }
                     }
                 }else{
                     Log.d(TAG, "Snapshot doesn't exist");

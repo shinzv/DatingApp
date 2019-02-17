@@ -1,11 +1,18 @@
 package eulberg.datingapp;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
@@ -18,6 +25,8 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
+
+import java.util.HashMap;
 
 @Layout(R.layout.swipecard)
 public class Swipecard {
@@ -33,6 +42,11 @@ public class Swipecard {
     @View(R.id.swipecard_location)
     private TextView location;
 
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+    private String currentUserID;
+
     private UserSettings user;
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
@@ -45,6 +59,10 @@ public class Swipecard {
         this.ID = ID;
     }
 
+    /**
+     * Methode wird aufgerufen, sobald die Swipecard erstellt wurde.
+     * Hier wird das Profilbild, sowie alle Informationen der Swipecard gesetzt.
+     */
     @Resolve
     private void onResolved(){
         //Glide.with(mContext).load(user.getImageUrl()).into(profileImageView);
@@ -52,32 +70,51 @@ public class Swipecard {
         name.setText(user.getUsername()+ "(" + user.getAge() + ")");
         location.setText(user.getCity());
         Log.d(TAG, "Swipecard created with ID: " + ID);
+        fireBaseAuth();
     }
-
+    /**
+     * Methode wird aufgerufen, wenn nach links geswiped wurde.
+     */
     @SwipeOut
     private void onSwipedOut(){
-        Log.d("EVENT", "onSwipedOut");
+        Log.d("SWIPE", "SwipedOut: Reject");
         mSwipeView.addView(this);
     }
 
-    @SwipeCancelState
-    private void onSwipeCancelState(){
-        Log.d("EVENT", "onSwipeCancelState");
-    }
-
+    /**
+     * Methode wird aufgerufen, wenn nach rechts geswiped wurde.
+     * Die ID des geliketen wird in der Datenbank innerhalb der Node des aktiven Nutzers als "liked" gespeichert.
+     */
     @SwipeIn
     private void onSwipeIn(){
-        Log.d("EVENT", "onSwipedIn");
+        Log.d("SWIPE", "SwipedIn: Accept");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("likedUserID", ID);
+        reference.child("likes").child(currentUserID).push().setValue(hashMap);
     }
 
+    /**
+     * Wird aufgerufen wenn man einen Swipe abbricht
+     */
+    @SwipeCancelState
+    private void onSwipeCancelState(){
+        Log.d("SWIPE", "SwipeCancelled");
+    }
+
+    /**
+     * Wird aufgerufen wenn man die Card nach Rechts bewegt.
+     */
     @SwipeInState
     private void onSwipeInState(){
-        Log.d("EVENT", "onSwipeInState");
+        Log.d("SWIPE", "onSwipeInState");
     }
 
+    /**
+     * Wird aufgerufen wenn man die Card nach Links bewegt.
+     */
     @SwipeOutState
     private void onSwipeOutState(){
-        Log.d("EVENT", "onSwipeOutState");
+        Log.d("SWIPE", "onSwipeOutState");
     }
 
     public String getID(){
@@ -97,5 +134,12 @@ public class Swipecard {
         }catch(Exception e){
             Log.d(TAG, "Couldn't load image" + ID);
         }
+    }
+
+    public void fireBaseAuth() {
+        mAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference();
+        currentUserID = mAuth.getCurrentUser().getUid();
     }
 }
