@@ -143,7 +143,7 @@ public class Swipecard {
      * sofern dies der Fall ist werden beide ID's der betroffenen Nutzer in der Node "matches" gespeichert.
      */
     public void checkIfMatch(){
-        Query liked = reference.child("likes").child(ID).orderByChild("ID");
+        Query liked = reference.child("likes").child(ID).orderByChild("likedUserID");
         liked.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
