@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment  {
     //Views
     private ImageView profilePicture;
     private TextView nameAndAge;
+    private TextView description;
 
     //Over this URI is the image accesable
     private Uri imageURI;
@@ -125,6 +126,7 @@ public class ProfileFragment extends Fragment  {
 
         //Initializing views
         nameAndAge = getView().findViewById(R.id.name);
+        description = getView().findViewById(R.id.profileDescription);
         Button editButton = getView().findViewById(R.id.editButton);
 
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -676,8 +678,9 @@ public class ProfileFragment extends Fragment  {
     /**
      * Setzt den Namen und das Alter in den
      */
-    public void setProfileInfo(){
+    public void setProfileInfo() {
         nameAndAge.setText(userSettings.getUsername() + "(" + userSettings.getAge() + ")");
+        description.setText(userSettings.getDescription());
     }
 
     /*
