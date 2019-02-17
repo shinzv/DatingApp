@@ -150,7 +150,7 @@ public class DiscoverFragment extends Fragment {
     public void getLikes(){
         Log.d(TAG, "Retrieving liked users from Firebase");
         likedUsers = new ArrayList<>();
-        Query liked = reference.child("likes").child(userID).orderByChild("ID");
+        Query liked = reference.child("likes").child(userID).orderByChild("likedUserID");
         liked.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
