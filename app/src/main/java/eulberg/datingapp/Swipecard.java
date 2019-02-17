@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
@@ -26,6 +27,7 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Layout(R.layout.swipecard)
@@ -83,7 +85,8 @@ public class Swipecard {
 
     /**
      * Methode wird aufgerufen, wenn nach rechts geswiped wurde.
-     * Die ID des geliketen wird in der Datenbank innerhalb der Node des aktiven Nutzers als "liked" gespeichert.
+     * Die ID des geliketen wird in der Datenbank innerhalb der Node des aktiven Nutzers als "liked" gespeichert
+     * und es wird die Methode checkIfMatch aufgerufen.
      */
     @SwipeIn
     private void onSwipeIn(){
@@ -91,6 +94,7 @@ public class Swipecard {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("likedUserID", ID);
         reference.child("likes").child(currentUserID).push().setValue(hashMap);
+        checkIfMatch();
     }
 
     /**
@@ -134,6 +138,30 @@ public class Swipecard {
         }catch(Exception e){
             Log.d(TAG, "Couldn't load image" + ID);
         }
+    }
+
+    public void checkIfMatch(){
+        Query liked = reference.child("likes").child(ID).orderByChild("ID");
+        liked.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    LikedUser likedUser = snapshot.getValue(LikedUser.class);
+                    if(likedUser.getLikedUserID().equals(currentUserID)){
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("matchedUserID", ID);
+                        reference.child("matches").child(currentUserID).push().setValue(hashMap);
+                        HashMap<String, Object> hashMap2 = new HashMap<>();
+                        hashMap2.put("matchedUserID", currentUserID);
+                        reference.child("matches").child(ID).push().setValue(hashMap);
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     public void fireBaseAuth() {
