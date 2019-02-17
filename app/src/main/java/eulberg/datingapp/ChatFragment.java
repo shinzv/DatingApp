@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -68,26 +70,23 @@ public class ChatFragment extends Fragment {
     }
 
     /**
-     * Die Methode wird benutzt um alle User auszulesen mit denen ich chatten kann.
+     * Die Methode wird benutzt um alle User aus der Datenbank auszulesen mit denen ich ein Match habe.
      */
     private void loadChatUser(){
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference matched = databaseReference.child("matches").child(firebaseUser.getUid());
+        matched.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatUserIDs.clear();
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    User user= snapshot.getValue(User.class);
-                    if (!user.getUser_id().equals(firebaseUser.getUid())) {
-                        chatUserIDs.add(user.getUser_id());
-                    }
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    MatchedUser matchedUser = snapshot.getValue(MatchedUser.class);
+                    chatUserIDs.add(matchedUser.getMatchedUserID());
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
