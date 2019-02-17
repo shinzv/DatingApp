@@ -25,17 +25,28 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * ChatFragmentAdapter wird dazu benutzt um die RecyclerView in dem ChatFragment zu verwalten
+ */
 public class ChatFragmentAdapter extends RecyclerView.Adapter<ChatFragmentAdapter.ViewHolder> {
 
     private ArrayList<String> chatUserIDs;
     private Context context;
 
 
+    /**
+     * Es werden die Referenzen initialisiert.
+     * @param context Der Kontext wird später benötigt um das Profilbild zu laden.
+     * @param chatUserIDs Die Liste mit den UserIDs, wird benötigt damit der Benutzername und das Profilbild korrekt geladen werden können.
+     */
     public ChatFragmentAdapter(Context context, ArrayList<String> chatUserIDs) {
         this.chatUserIDs = chatUserIDs;
         this.context = context;
     }
 
+    /**
+     * In der Methode wird das Layout festgelegt
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -44,10 +55,13 @@ public class ChatFragmentAdapter extends RecyclerView.Adapter<ChatFragmentAdapte
         return viewHolder;
     }
 
-
+    /**
+     * In der Methode wird das Profilbild und der Benutzernae geladen
+     * @param viewHolder ViewHolder wird benötigt um den Benutzername und das Profilbild zu setzen.
+     * @param i I wird benötigt um den korrekten Index für die Liste mit den UserIDs zu übergeben.
+     */
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        //TODO Profilbild und Namen über die ID festlegen
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(chatUserIDs.get(i));
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,17 +94,28 @@ public class ChatFragmentAdapter extends RecyclerView.Adapter<ChatFragmentAdapte
         });
     }
 
+    /**
+     * Die Länge der Liste mit den UserIDs wird zurückgegeben.
+     * @return Die Länge der Liste.
+     */
     @Override
     public int getItemCount() {
         return chatUserIDs.size();
     }
 
+    /**
+     * Die innere Klasse ViewHolder beinhaltet die Referenzen auf die Views des Textfeldes für den Benutzernamen und die des Profilbildes.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         CircleImageView chatImage;
         TextView chatUsername;
         RelativeLayout parentLayout;
 
+        /**
+         * Die Referenzen auf die Views werden initialisiert.
+         * @param itemView ItemView wird übergeben um den Konstruktor der Oberklasse aufzurufen.
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             chatImage = itemView.findViewById(R.id.chatImage);

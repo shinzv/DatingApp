@@ -32,6 +32,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Die Klasse Chat wird benutzt um einen Chat zwischen einem selber und einem anderen Chatteilnehmer zu verwalten
+ */
 public class Chat extends AppCompatActivity {
 
     //Referenzen
@@ -131,6 +134,11 @@ public class Chat extends AppCompatActivity {
         });
     }
 
+    /**
+     * Der Methode wird eine Nachricht übergeben, bei der redundante Leerzeichen sowie Leerzeilen werden entfernt.
+     * @param message Die Nachricht welche bearbeitet wird.
+     * @return Die überarbeite Nachricht ohne unnötige Leerzechen sowie Leerzeilen wird zurückgegeben.
+     */
     private String removeUnnecessarySpacesAndBreaks(String message) {
         while(message.startsWith(" ") || message.startsWith("\n") || message.endsWith(" ") || message.endsWith("\n")){
             if (message.startsWith(" ") || message.startsWith("\n")) {
@@ -142,6 +150,12 @@ public class Chat extends AppCompatActivity {
         return message;
     }
 
+
+    /**
+     * Der Methode wird eine Nachricht übergeben, bei der überprüft wird, ob sie nicht nur aus Leerzeichen und Leerzeilen besteht
+     * @param message Die Nachricht welche bearbeitet wird.
+     * @return Es wird wahr zurückgegeben, wenn die Nachricht nicht nur aus Leerzeichen und Leerzeilen besteht.
+     */
     private boolean messageIsValid(String message) {
         String messageWithoutBreaks = message.replace("\n","");
         String messageWithoutSpaces = messageWithoutBreaks.replace(" ","");
@@ -151,6 +165,12 @@ public class Chat extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Die Methode wird aufgerufen um eine übergebene Nachricht mit Informationen über den Sender und den Empfänger in die Datenbank hochzuladen.
+     * @param sender Die UserID des Senders.
+     * @param receiver Die UserID des Empfängers.
+     * @param message Die Nachricht.
+     */
     private void sendMessage(String sender, String receiver,String message){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -164,6 +184,11 @@ public class Chat extends AppCompatActivity {
 
     }
 
+    /**
+     * Die Methode wird benutzt um die zu einem Chat zugehörigen Nachrichten aus der Datenbank auszulesen.
+     * @param myUserID Die eigene UserID.
+     * @param othersUserID Die UserID des anderen Chatteilnehmers
+     */
     private void readMessages(final String myUserID, final String othersUserID){
         messages = new ArrayList<>();
 
