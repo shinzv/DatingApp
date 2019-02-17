@@ -25,6 +25,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
+/**
+ * Das ChatFragment wird dazu benutzt die Personen dazustellen, welche ich "geliket" habe und welche mich auch "zurück geliket" haben, und bietet die Funktion mit diesen dann zu schreiben.
+ */
 public class ChatFragment extends Fragment {
 
     private ArrayList<String> chatUserIDs = new ArrayList<>();
@@ -32,29 +35,31 @@ public class ChatFragment extends Fragment {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
+    /**
+     * In der Methode wird das Layout festgelegt.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_chat, container, false);
     }
 
-
+    /**
+     * Die Methode initialisiert die Referenzen.
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
-        initChatUser();
-    }
-
-    private void initChatUser() {
-        //chatUserIDs.clear();
-        //chatUserIDs.add("bAf87RDMF7cUzYR54ocJ1qqhHsG2");
         loadChatUser();
         initRecyclerView();
     }
 
+    /**
+     * Die Methode initialisiert die RecyclerView und legt den ChatFragmentAdapter als Adapter für die RecyclerView fest.
+     */
     private void initRecyclerView(){
         RecyclerView recyclerView = getView().findViewById(R.id.chats);
         ChatFragmentAdapter adapter = new ChatFragmentAdapter(getContext(), chatUserIDs);
@@ -63,21 +68,8 @@ public class ChatFragment extends Fragment {
     }
 
     /**
-     * Checks if the user is connected to the internet. -> This method cannot be modularised because if it is static we cannot reference to the non-static method
-     * "getActivity()" which is essential for this method to work.
-     * @return wether the user is connected or not.
+     * Die Methode wird benutzt um alle User auszulesen mit denen ich chatten kann.
      */
-    private boolean checkInternetConnection(){
-        boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED){
-            //We are connected to a network
-            connected = true;
-        }
-        return connected;
-    }
-
     private void loadChatUser(){
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
