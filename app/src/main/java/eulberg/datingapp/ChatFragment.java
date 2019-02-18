@@ -57,6 +57,9 @@ public class ChatFragment extends Fragment {
         storageReference = firebaseStorage.getReference();
         loadChatUser();
         initRecyclerView();
+        if(!chatUserIDs.isEmpty()){
+            getView().findViewById(R.id.chatFragmentText).setWillNotDraw(true);
+        }
     }
 
     /**
