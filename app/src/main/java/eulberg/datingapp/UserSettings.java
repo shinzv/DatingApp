@@ -13,6 +13,13 @@ public class UserSettings implements Serializable {
     //private double longtitude;
     // private String phoneNumber;
 
+    /**
+     * Konstruktor
+     * @param age
+     * @param description
+     * @param gender
+     * @param username
+     */
     public UserSettings(long age, String description, String gender, String username) {
         this.age = age;
         this.description = description;
@@ -24,34 +31,63 @@ public class UserSettings implements Serializable {
 
     }
 
+    /**
+     * sondierende Methode
+     * @return age
+     */
     public long getAge() {
         return age;
     }
 
+    /**
+     * verändernde Methode
+     * @param age
+     */
     public void setAge(long age) {
         this.age = age;
     }
-
+    /**
+     * sondierende Methode
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * verändernde Methode
+     * @param description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
-
+    /**
+     * sondierende Methode
+     * @return gender
+     */
     public String getGender() {
         return gender;
     }
 
+    /**
+     * verändernde Methode
+     * @param gender
+     */
     public void setGender(String gender) {
         this.gender = gender;
     }
-
+    /**
+     * sondierende Methode
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * verändernde Methode
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
@@ -65,7 +101,6 @@ public class UserSettings implements Serializable {
     }*/
 
 
-
     @Override
     public String toString() {
         return "UserSettings{" +
@@ -77,10 +112,18 @@ public class UserSettings implements Serializable {
                 '}';
     }
 
+    /**
+     * sondierende Methode
+     * @return city
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * verändernde Methode
+      * @param city
+     */
     public void setCity(String city) {
         this.city = city;
     }

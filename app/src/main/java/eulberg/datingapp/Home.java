@@ -73,7 +73,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
     private boolean stopAds = true;
 
     /**
-     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Siehe „Lifecyle of an Activity“ für den Aufrufszeitraum.
      * Initialisierungen usw...
      * @param savedInstanceState
      */
@@ -254,7 +254,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
     }
 
     /**
-     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Siehe „Lifecyle of an Activity“ für den Aufrufszeitraum.
      * Fügt den LocationListener hinzu.(Jede Minute wird er aufgerufen.)
      */
     @Override
@@ -271,7 +271,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
     }
 
     /**
-     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Siehe „Lifecyle of an Activity“ für den Aufrufszeitraum.
      * Entfernt den LocationListener.
      */
     @Override
@@ -284,7 +284,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
     }
 
     /**
-     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Siehe „Lifecyle of an Activity“ für den Aufrufszeitraum.
      * Nach 5 Sekunden wird nochmal geprüft, ob das GPS eingeschaltet wurde. Wenn nicht, dann wird CheckIfGPSEnabled() aufgerufen.
      */
     @Override

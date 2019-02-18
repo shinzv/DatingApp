@@ -49,12 +49,24 @@ public class DiscoverFragment extends Fragment {
     //Matching
     private ArrayList<LikedUser> likedUsers;
 
+    /**
+     * Wird aufgerufen beim Erstellen der Activity, hier wird das Layout wird festgelegt
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
+    /**
+     * Wird aufgerufen beim Erstellen der Activity, hier wird die SwipeView für die Swipecards instanziiert,
+     * sowie Methoden mit hoher Priorität aufgerufen und die Buttons angelegt.
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -110,6 +122,12 @@ public class DiscoverFragment extends Fragment {
         return connected;
     }
 
+    /**
+     * Firebase Authentifikation.
+     * Hier werden die jeweiligen Firebasen Instanzen initialisiert. Dies umfasst eine Instanz der Firebase Datenbank,
+     * eine Referenz der Datenbank, sowie die ID des authentifizierten Nutzers. Außerdem wird die Methode getUserSettings() hier aufgerufen,
+     * da sie einen Datasnapshot benötigt von der Referenz benötigt.
+     */
     public void fireBaseAuth() {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -118,7 +136,7 @@ public class DiscoverFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //retrieving data
+                //retrieving user data
                 getUserSettings(dataSnapshot);
             }
 
@@ -130,6 +148,11 @@ public class DiscoverFragment extends Fragment {
 
     }
 
+    /**
+     * Nutzerdaten werden aus dem snapshot der Datenbank in ein Objekt der Klasse UserSettings geladen und die Methode
+     * setGenderToSearchFor() wird aufgerufen
+     * @param dataSnapshot Snapshot der Datenbank
+     */
     public void getUserSettings(DataSnapshot dataSnapshot){
         Log.d(TAG, "Retrieving user_settings information from Firebase");
         userSettings = new UserSettings();
@@ -147,10 +170,13 @@ public class DiscoverFragment extends Fragment {
         }
     }
 
+    /**
+     * Mit einer Query wird ein Snapshot der "likes" des aktiven Nutzers gemacht und diese werden in Form eines Objekts der Klasse likedUsers in eine ArrayList eingefügt.
+     */
     public void getLikes(){
         Log.d(TAG, "Retrieving liked users from Firebase");
         likedUsers = new ArrayList<>();
-        Query liked = reference.child("likes").child(userID).orderByChild("ID");
+        Query liked = reference.child("likes").child(userID).orderByChild("likedUserID");
         liked.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -166,6 +192,10 @@ public class DiscoverFragment extends Fragment {
         });
     }
 
+    /**
+     * Es wird das jeweils andere Geschlecht, als das zu suchende Geschlecht gesetzt.
+     * Die App ist zum jetzigen Zeitpunkt nur auf hetero Nutzer ausgelegt.
+     */
     public void setGenderToSearchFor(){
         if(userSettings.getGender().equals("male")){
             genderToSearchFor = "female";
@@ -174,6 +204,13 @@ public class DiscoverFragment extends Fragment {
         }
     }
 
+    /**
+     * Diese Methode sucht alle potentiellen Matches aus der Datenbank und filtert sie.
+     * Die Query beschränkt das Geschlecht der User innerhalb des Snapshots. Exkurs: Firebase Queries können nur eine Bedingung haben,
+     * also filtert man danach womit man die meisten User ausschließen kann. Danach wird durch den Snapshot iteriert und falls sie nicht bereits
+     * vom aktiven Nutzer geliket wurden, also sich in der likedUsers ArrayList befinden, werden sie in einer Swipecard zur Swipeview hinzugefügt.
+     *
+     */
     public void getPotentialMatches(){
         Query potentialMatches = userSettingsReference.orderByChild("gender").startAt(genderToSearchFor).endAt(genderToSearchFor);
 

@@ -143,7 +143,7 @@ public class Swipecard {
      * sofern dies der Fall ist werden beide ID's der betroffenen Nutzer in der Node "matches" gespeichert.
      */
     public void checkIfMatch(){
-        Query liked = reference.child("likes").child(ID).orderByChild("ID");
+        Query liked = reference.child("likes").child(ID).orderByChild("likedUserID");
         liked.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -155,7 +155,7 @@ public class Swipecard {
                         reference.child("matches").child(currentUserID).push().setValue(hashMap);
                         HashMap<String, Object> hashMap2 = new HashMap<>();
                         hashMap2.put("matchedUserID", currentUserID);
-                        reference.child("matches").child(ID).push().setValue(hashMap);
+                        reference.child("matches").child(ID).push().setValue(hashMap2);
                     }
 
                 }
@@ -167,6 +167,11 @@ public class Swipecard {
         });
     }
 
+    /**
+     * Firebase Authentifikation.
+     * Hier werden die jeweiligen Firebasen Instanzen initialisiert. Dies umfasst eine Instanz der Firebase Datenbank,
+     * eine Referenz der Datenbank, sowie die ID des authentifizierten Nutzers.
+     */
     public void fireBaseAuth() {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
