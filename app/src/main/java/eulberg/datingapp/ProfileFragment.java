@@ -55,6 +55,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -435,16 +436,25 @@ public class ProfileFragment extends Fragment  {
 
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+userID);
 
-            Glide.with(getContext())
-                    .load(storageReference.getDownloadUrl())
-                    .into(new SimpleTarget<Drawable>() {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                            profilePicture.setImageDrawable(resource);
-                            sharedPreferences.edit().putString(uriImg, Uri.parse(resource.toString()).toString()).apply();
+            long megabyte = 1024 * 1024;
+            storageReference.getBytes(megabyte).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(final byte[] bytes) {
+                    try {
+                        File file = new File(Environment.getExternalStorageDirectory(), "ProfilePicture " + userID);
 
-                        }
-                    });
+                        FileOutputStream fos = new FileOutputStream(file.getPath());
+                        fos.write(bytes);
+                        fos.close();
+
+                        imageURI = Uri.fromFile(file);
+                        profilePicture.setImageURI( imageURI);
+                        sharedPreferences.edit().putString(uriImg, imageURI.toString()).apply();
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             /*
             //Wenn kein Bild in den Prefs existiert, dann downloade es vom Server.
