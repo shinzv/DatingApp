@@ -52,13 +52,6 @@ public class Swipecard {
     private SwipePlaceHolderView mSwipeView;
     private String ID;
 
-    /**
-     * Konstruktor
-     * @param context Kontext
-     * @param user userSettings-Instanz
-     * @param ID id des Users
-     * @param swipeView swipeView
-     */
     public Swipecard(Context context, UserSettings user, String ID, SwipePlaceHolderView swipeView) {
         mContext = context;
         this.user = user;
@@ -162,7 +155,7 @@ public class Swipecard {
                         reference.child("matches").child(currentUserID).push().setValue(hashMap);
                         HashMap<String, Object> hashMap2 = new HashMap<>();
                         hashMap2.put("matchedUserID", currentUserID);
-                        reference.child("matches").child(ID).push().setValue(hashMap);
+                        reference.child("matches").child(ID).push().setValue(hashMap2);
                     }
 
                 }
@@ -175,7 +168,9 @@ public class Swipecard {
     }
 
     /**
-     * initialisiert die Variablen, die mit Firebase in Verbindung stehen.
+     * Firebase Authentifikation.
+     * Hier werden die jeweiligen Firebasen Instanzen initialisiert. Dies umfasst eine Instanz der Firebase Datenbank,
+     * eine Referenz der Datenbank, sowie die ID des authentifizierten Nutzers.
      */
     public void fireBaseAuth() {
         mAuth = FirebaseAuth.getInstance();

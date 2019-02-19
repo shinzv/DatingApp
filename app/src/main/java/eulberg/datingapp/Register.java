@@ -48,9 +48,9 @@ public class Register extends AppCompatActivity {
     private String gender;
 
     /**
-     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
-     * Initialisierungen usw...
-     * @param savedInstanceState der gespeicherte Status der App
+     * Wird aufgerufen beim erstellen der Activity, das Layout wird festgelegt, die Animation des Hintergrunds gestartet,
+     * sowie die Buttons angelegt.
+     * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +127,12 @@ public class Register extends AppCompatActivity {
         });
     }
 
+    /**
+     * Methode zum registrieren. Methode wird aufgerufen beim klicken des Register-Buttons.
+     * Es wird ein neuer Nutzer in der Firebase Datenbank angelegt.
+     * @param email
+     * @param password
+     */
     public void signUp(String email, String password) {
         try{
         mAuth.createUserWithEmailAndPassword(email, hashPassword(password)).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -154,8 +160,12 @@ public class Register extends AppCompatActivity {
         }
     }
 
+    /**
+     * Firebase Authentifikation.
+     * Hier werden die jeweiligen Firebasen Instanzen initialisiert. Dies umfasst eine Instanz der Firebase Datenbank,
+     * eine Referenz der Datenbank, sowie die ID des authentifizierten Nutzers.
+     */
     public void fireBaseAuth() {
-
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference();
@@ -186,6 +196,14 @@ public class Register extends AppCompatActivity {
         };
     }
 
+    /**
+     * Legt neue Nutzerdaten in der Datenbank innerhalb der relevanten Children an.
+     * @param email
+     * @param username
+     * @param description
+     * @param gender
+     */
+
     public void addNewUser(String email, String username, String description, String gender){
         User user = new User(userID, username, email);
         reference.child(mContext.getString(R.string.db_users)).child(userID).setValue(user);
@@ -194,6 +212,13 @@ public class Register extends AppCompatActivity {
         reference.child(mContext.getString(R.string.db_user_settings)).child(userID).setValue(settings);
     }
 
+    /**
+     * Message Digest 5 Hashing Algorithmus.
+     * Mithilfe der MessageDigest Klasse wird der MD5 Algorithmus zum Hashing des Passworts verwendet.
+     * @param password
+     * @return hash
+     * @throws NoSuchAlgorithmException
+     */
     public static String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(password.getBytes());
@@ -205,9 +230,18 @@ public class Register extends AppCompatActivity {
         return sb.toString();
     }
 
+    /**
+     * sondierende Methode
+     * @return
+     */
     public String getEmail(){
         return email.getText().toString();
     }
+
+    /**
+     * sondierende Methode
+     * @return
+     */
     public String getUsername(){
         return username.getText().toString();
     }
