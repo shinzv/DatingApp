@@ -45,6 +45,7 @@
                 android:ems="10"
                 android:hint="Nutzername"
                 android:inputType="textEmailAddress"
+                android:maxLength="20"
                 android:textColor="#FFDFE6E9"
                 android:textColorHint="#FFDFE6E9" />
 
