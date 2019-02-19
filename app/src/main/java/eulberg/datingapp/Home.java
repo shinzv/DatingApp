@@ -323,37 +323,37 @@ public class Home extends AppCompatActivity implements InterstitialListener {
     //
     @Override
     public void onInterstitialAdReady() {
-
+        Log.d(TAG, "onInterstitialAdReady()");
     }
 
     @Override
     public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
-
+        Log.d(TAG, "onInterstitialAdLoadFailed()");
     }
 
     @Override
     public void onInterstitialAdOpened() {
-
+        Log.d(TAG, "onInterstitialAdOpened()");
     }
 
     @Override
     public void onInterstitialAdClosed() {
-
+        Log.d(TAG, "onInterstitialAdClosed()");
     }
 
     @Override
     public void onInterstitialAdShowSucceeded() {
-
+        Log.d(TAG, "onInterstitialAdShowSucceeded()");
     }
 
     @Override
     public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
-
+        Log.d(TAG, "onInterstitialAdShowFailed()");
     }
 
     @Override
     public void onInterstitialAdClicked() {
-
+        Log.d(TAG, "onInterstitialAdClicked()");
     }
     //
     //InterStitial Listener: END
