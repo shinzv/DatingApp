@@ -33,7 +33,7 @@ public class EditProfile extends AppCompatActivity {
     private DatabaseReference reference;
     private FirebaseAuth mAuth;
 
-    private static final String TAG = ProfileSettings.class.getSimpleName();
+    private static final String TAG = EditProfile.class.getSimpleName();
 
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.

@@ -48,6 +48,7 @@ public class DiscoverFragment extends Fragment {
 
     //Matching
     private ArrayList<LikedUser> likedUsers;
+    private ArrayList<DislikedUser> dislikedUsers;
 
     /**
      * Wird aufgerufen beim Erstellen der Activity, hier wird das Layout wird festgelegt
@@ -86,8 +87,6 @@ public class DiscoverFragment extends Fragment {
         fireBaseAuth();
 
         userSettingsReference = firebaseDatabase.getInstance().getReference().child("user_settings");
-
-        getLikes();
 
         //Buttons zum liken oder ablehnen
         getView().findViewById(R.id.reject_button).setOnClickListener(new View.OnClickListener() {
@@ -171,7 +170,7 @@ public class DiscoverFragment extends Fragment {
     }
 
     /**
-     * Mit einer Query wird ein Snapshot der "likes" des aktiven Nutzers gemacht und diese werden in Form eines Objekts der Klasse likedUsers in eine ArrayList eingefügt.
+     * Mit einer Query wird ein Snapshot der "likes" des aktiven Nutzers gemacht und diese werden in Form eines Objekts der Klasse LikedUser in eine ArrayList eingefügt.
      */
     public void getLikes(){
         Log.d(TAG, "Retrieving liked users from Firebase");
@@ -183,7 +182,27 @@ public class DiscoverFragment extends Fragment {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     LikedUser likedUser = snapshot.getValue(LikedUser.class);
                     likedUsers.add(likedUser);
-                    Log.d(TAG, likedUsers.get(0).getLikedUserID());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    /**
+     * Mit einer Query wird ein Snapshot der "dislikes" des aktiven Nutzers gemacht und diese werden in Form eines Objekts der Klasse DislikedUser in eine ArrayList eingefügt.
+     */
+    public void getDislikes(){
+        Log.d(TAG, "Retrieving disliked users from Firebase");
+        dislikedUsers = new ArrayList<>();
+        Query disliked = reference.child("dislikes").child(userID).orderByChild("dislikedUserID");
+        disliked.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    DislikedUser dislikedUser = snapshot.getValue(DislikedUser.class);
+                    dislikedUsers.add(dislikedUser);
                 }
             }
             @Override
@@ -209,12 +228,15 @@ public class DiscoverFragment extends Fragment {
      * Diese Methode sucht alle potentiellen Matches aus der Datenbank und filtert sie.
      * Die Query beschränkt das Geschlecht der User innerhalb des Snapshots. Exkurs: Firebase Queries können nur eine Bedingung haben,
      * also filtert man danach womit man die meisten User ausschließen kann. Danach wird durch den Snapshot iteriert und falls sie nicht bereits
-     * vom aktiven Nutzer geliket wurden, also sich in der likedUsers ArrayList befinden, werden sie in einer Swipecard zur Swipeview hinzugefügt.
+     * vom aktiven Nutzer geliket oder gedisliket wurden, also sich in der likedUsers ArrayList befinden, werden sie in einer Swipecard zur Swipeview hinzugefügt.
      *
      */
     public void getPotentialMatches(){
         Log.d(TAG, genderToSearchFor);
         Query potentialMatches = userSettingsReference.orderByChild("gender").startAt(genderToSearchFor).endAt(genderToSearchFor);
+
+        getLikes();
+        getDislikes();
 
         potentialMatches.addValueEventListener(new ValueEventListener() {
             @Override
@@ -227,6 +249,9 @@ public class DiscoverFragment extends Fragment {
                         String ID = ds.getKey();
                         for (int i = 0; i < likedUsers.size() && notLiked; i++) {
                             if(likedUsers.get(i).getLikedUserID().equals(ID)){ notLiked = false; }
+                        }
+                        for (int i = 0; i < dislikedUsers.size() && notLiked; i++) {
+                            if(dislikedUsers.get(i).getDislikedUserID().equals(ID)){ notLiked = false; }
                         }
                         if(notLiked) {
                             mSwipeView.addView(new Swipecard(mContext, user, ID, mSwipeView));

@@ -160,8 +160,6 @@ public class ProfileFragment extends Fragment  {
         });
 
 
-
-
         //Initializing Apps Array for the AlertDialog
         apps[0] = "Kamera";
         apps[1] = "Galerie";

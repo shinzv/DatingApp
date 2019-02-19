@@ -78,6 +78,9 @@ public class Swipecard {
     @SwipeOut
     private void onSwipedOut(){
         Log.d("SWIPE", "SwipedOut: Reject");
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("dislikedUserID", ID);
+        reference.child("dislikes").child(currentUserID).push().setValue(hashMap);
         mSwipeView.addView(this);
     }
 
