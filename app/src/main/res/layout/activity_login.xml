@@ -7,7 +7,7 @@
     android:id="@+id/login"
     android:background="@drawable/gradient_list"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-    tools:context=".Login">
+    tools:context=".Start.Login">
 
 
     <LinearLayout

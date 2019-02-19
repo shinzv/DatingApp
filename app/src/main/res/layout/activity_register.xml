@@ -7,7 +7,7 @@
     android:id="@+id/register"
     android:background="@drawable/gradient_list"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-    tools:context=".Register">
+    tools:context=".Start.Register">
 
     <ScrollView
         android:layout_width="match_parent"

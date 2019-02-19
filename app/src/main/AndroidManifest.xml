@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:resizeableActivity="false">
-        <activity android:name=".Login" android:screenOrientation="portrait">
+        <activity android:name=".Start.Login" android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,10 +28,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Home" android:screenOrientation="portrait"/>
-        <activity android:name=".Register" android:screenOrientation="portrait"/>
+        <activity android:name=".Start.Register" android:screenOrientation="portrait"/>
         <activity android:name=".EditProfile" android:screenOrientation="portrait"/>
-        <activity android:name=".Chat" android:screenOrientation="portrait"/>
-        <activity android:name=".DisplayProfile" android:screenOrientation="portrait"/>
+        <activity android:name=".Chat.Chat" android:screenOrientation="portrait"/>
+        <activity android:name=".Chat.DisplayProfile" android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.ironsource.sdk.controller.ControllerActivity"

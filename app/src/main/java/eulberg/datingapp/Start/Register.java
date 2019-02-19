@@ -1,4 +1,4 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Start;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +29,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import eulberg.datingapp.Home;
+import eulberg.datingapp.R;
+import eulberg.datingapp.User;
+import eulberg.datingapp.UserSettings;
 
 public class Register extends AppCompatActivity {
 

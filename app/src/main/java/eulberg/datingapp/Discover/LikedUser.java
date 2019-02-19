@@ -1,4 +1,4 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Discover;
 
 public class LikedUser {
 

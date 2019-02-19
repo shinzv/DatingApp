@@ -1,15 +1,11 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Chat;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +16,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
+import eulberg.datingapp.Discover.MatchedUser;
+import eulberg.datingapp.R;
 
 /**
  * Das ChatFragment wird dazu benutzt die Personen dazustellen, welche ich "geliket" habe und welche mich auch "zurück geliket" haben, und bietet die Funktion mit diesen dann zu schreiben.

@@ -1,4 +1,4 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Discover;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -17,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Layout;
@@ -29,8 +28,10 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import eulberg.datingapp.R;
+import eulberg.datingapp.UserSettings;
 
 @Layout(R.layout.swipecard)
 public class Swipecard {

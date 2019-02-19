@@ -1,4 +1,4 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Start;
 
 import android.Manifest;
 import android.content.Intent;
@@ -29,7 +29,8 @@ import java.util.List;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import static eulberg.datingapp.Register.hashPassword;
+import eulberg.datingapp.Home;
+import eulberg.datingapp.R;
 
 public class Login extends AppCompatActivity {
 

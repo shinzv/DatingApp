@@ -1,4 +1,4 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Chat;
 
 import android.content.Context;
 
@@ -19,6 +19,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import eulberg.datingapp.Message;
+import eulberg.datingapp.R;
 
 /**
  * ChatAdapter wird benötigt um die RecyclerView für die Nachrichten im Chat zu verwalten.

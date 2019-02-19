@@ -1,4 +1,4 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Chat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,9 +28,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import eulberg.datingapp.Message;
+import eulberg.datingapp.R;
+import eulberg.datingapp.User;
 
 /**
  * Die Klasse Chat wird benutzt um einen Chat zwischen einem selber und einem anderen Chatteilnehmer zu verwalten
@@ -120,7 +122,7 @@ public class Chat extends AppCompatActivity {
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent displayProfile = new Intent(Chat.this,DisplayProfile.class);
+                Intent displayProfile = new Intent(Chat.this, DisplayProfile.class);
                 displayProfile.putExtra("userID",userID);
                 startActivity(displayProfile);
             }

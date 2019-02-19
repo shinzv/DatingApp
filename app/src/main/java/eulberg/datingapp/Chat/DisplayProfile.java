@@ -1,12 +1,10 @@
-package eulberg.datingapp;
+package eulberg.datingapp.Chat;
 
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +19,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import eulberg.datingapp.R;
+import eulberg.datingapp.UserSettings;
 
 public class DisplayProfile extends AppCompatActivity {
 
