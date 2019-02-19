@@ -162,8 +162,7 @@ public class Swipecard {
                         hashMap2.put("matchedUserID", currentUserID);
                         reference.child("matches").child(ID).push().setValue(hashMap2);
                         Toast.makeText(mContext, "IHR HABT EIN MATCH!", Toast.LENGTH_SHORT).show();
-                    }
-
+                }
                 }
             }
             @Override
