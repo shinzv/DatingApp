@@ -66,7 +66,6 @@ public class Home extends AppCompatActivity implements InterstitialListener {
 
     private String userID;
 
-    private UserSettings userSettings;
 
     //IronSource
     private final String APP_KEY = "88c7a19d";

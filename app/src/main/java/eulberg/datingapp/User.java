@@ -21,6 +21,9 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    /**
+     * Dieser leere Konstruktor wird für Firebase benötigt
+     */
     public User() {
 
     }

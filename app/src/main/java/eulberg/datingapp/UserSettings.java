@@ -13,6 +13,13 @@ public class UserSettings implements Serializable {
     //private double longtitude;
     // private String phoneNumber;
 
+    /**
+     * Konstruktor
+     * @param age alter
+     * @param description Beschreibung
+     * @param gender Geschlecht
+     * @param username Usernamen
+     */
     public UserSettings(long age, String description, String gender, String username) {
         this.age = age;
         this.description = description;
@@ -20,38 +27,73 @@ public class UserSettings implements Serializable {
         this.username = username;
     }
 
+    /**
+     * Dieser leere Konstruktor wird für Firebase benötigt
+     */
     public UserSettings() {
 
     }
 
+    /**
+     * sondierende Methode
+     * @return age jetziges Alter
+     */
     public long getAge() {
         return age;
     }
 
+    /**
+     * verändernde Methode
+     * @param age neue Alter
+     */
     public void setAge(long age) {
         this.age = age;
     }
 
+    /**
+     * sondierende Methode
+     * @return description derzeitige Beschreibung
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * verändernde Methode
+     * @param description neue Beschreibung
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * sondierende Methode
+     * @return gender derzeitiges Geschlecht
+     */
     public String getGender() {
         return gender;
     }
 
+    /**
+     * verändernde Methode
+     * @param gender neues Geschlecht
+     */
     public void setGender(String gender) {
         this.gender = gender;
     }
 
+    /**
+     * sondierende Methode
+     * @return username derzeitiger username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * verändernde Methode
+     * @param username neuer Benutzername
+     */
     public void setUsername(String username) {
         this.username = username;
     }
@@ -65,7 +107,10 @@ public class UserSettings implements Serializable {
     }*/
 
 
-
+    /**
+     *
+     * @return String, der die Attribute dieser Klasse als einen Text darstellt.
+     */
     @Override
     public String toString() {
         return "UserSettings{" +
@@ -77,10 +122,18 @@ public class UserSettings implements Serializable {
                 '}';
     }
 
+    /**
+     * sondierende Methode
+     * @return Stadtnamen
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * verändernde Methode
+     * @param city neue Stadtname
+     */
     public void setCity(String city) {
         this.city = city;
     }
