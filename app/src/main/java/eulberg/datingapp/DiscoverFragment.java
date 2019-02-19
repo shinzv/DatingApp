@@ -72,7 +72,6 @@ public class DiscoverFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mSwipeView = (SwipePlaceHolderView)getView().findViewById(R.id.swipeView);
         mContext = getContext();
-        genderToSearchFor = "male";
 
         //Legt Werte der Swipecards fest
         mSwipeView.getBuilder()
@@ -89,7 +88,6 @@ public class DiscoverFragment extends Fragment {
         userSettingsReference = firebaseDatabase.getInstance().getReference().child("user_settings");
 
         getLikes();
-        getPotentialMatches();
 
         //Buttons zum liken oder ablehnen
         getView().findViewById(R.id.reject_button).setOnClickListener(new View.OnClickListener() {
@@ -163,6 +161,7 @@ public class DiscoverFragment extends Fragment {
                     Log.d(TAG, "User Datasnapshot: " + ds.child(userID).getValue());
                     userSettings = ds.child(userID).getValue(UserSettings.class);
                     setGenderToSearchFor();
+                    getPotentialMatches();
                 }catch(NullPointerException e){
                     Log.d(TAG, "Error occurred loading data: " + e.getMessage());
                 }
@@ -203,6 +202,7 @@ public class DiscoverFragment extends Fragment {
         }else{
             genderToSearchFor = "male";
         }
+        Log.d(TAG, "Gender to search for: " + genderToSearchFor);
     }
 
     /**
@@ -213,6 +213,7 @@ public class DiscoverFragment extends Fragment {
      *
      */
     public void getPotentialMatches(){
+        Log.d(TAG, genderToSearchFor);
         Query potentialMatches = userSettingsReference.orderByChild("gender").startAt(genderToSearchFor).endAt(genderToSearchFor);
 
         potentialMatches.addValueEventListener(new ValueEventListener() {
