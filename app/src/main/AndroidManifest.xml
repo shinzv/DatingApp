@@ -30,7 +30,6 @@
         <activity android:name=".Home" android:screenOrientation="portrait"/>
         <activity android:name=".Register" android:screenOrientation="portrait"/>
         <activity android:name=".EditProfile" android:screenOrientation="portrait"/>
-        <activity android:name=".ProfileSettings" android:screenOrientation="portrait"/>
         <activity android:name=".Chat" android:screenOrientation="portrait"/>
         <activity android:name=".DisplayProfile" android:screenOrientation="portrait"/>
 

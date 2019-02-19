@@ -64,6 +64,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment  {
 
@@ -115,8 +116,7 @@ public class ProfileFragment extends Fragment  {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
-    //TODO ProfileFragment schließt sobald onCreate drin ist
-    //Solved by Haydar: OnCreateView -> OnCreate bei Fragments bedeutet: findViewById darf noch nicht angewendet werden, returnt NULL!
+
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
      * Initialisierungen usw...
@@ -146,11 +146,16 @@ public class ProfileFragment extends Fragment  {
             }
         });
 
-        Button settingsButton = getView().findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        Button logoutButton = getView().findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ProfileSettings.class));
+                FirebaseAuth.getInstance().signOut();
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                sharedPreferences.edit().clear().apply();
+
+                startActivity(new Intent(getActivity(), Login.class));
+
             }
         });
 
@@ -237,7 +242,7 @@ public class ProfileFragment extends Fragment  {
     private void removePicture() {
         try {
             storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(uriImg);
             editor.apply();
@@ -326,7 +331,7 @@ public class ProfileFragment extends Fragment  {
      * Speichert das Profilbild lokal und auf dem Server ab.
      */
     private void saveProfilePicture(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(uriImg, imageURI.toString());
         editor.apply();
@@ -420,7 +425,7 @@ public class ProfileFragment extends Fragment  {
      * lädt die Uri des Profilbilds aus den SharedPrefs Daten aus und lädt es in die CicleImageView.
      */
     private void loadProfileFiles(){
-        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         //Uri ist abstract und kann nicht instanziiert werden.
         imageURI = Uri.parse(sharedPreferences.getString(uriImg, ""));
         if(imageURI.toString() != "") {
