@@ -160,6 +160,7 @@ public class DiscoverFragment extends Fragment {
             if(ds.getKey().equals("user_settings")){
                 Log.d(TAG, "Datasnapshot: " + ds);
                 try {
+                    Log.d(TAG, "User Datasnapshot: " + ds.child(userID).getValue());
                     userSettings = ds.child(userID).getValue(UserSettings.class);
                     setGenderToSearchFor();
                 }catch(NullPointerException e){
