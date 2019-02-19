@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
@@ -431,6 +432,20 @@ public class ProfileFragment extends Fragment  {
                 e.printStackTrace();
             }
         } else {
+
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfilePictures/"+userID);
+
+            Glide.with(getContext())
+                    .load(storageReference.getDownloadUrl())
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            profilePicture.setImageDrawable(resource);
+                            sharedPreferences.edit().putString(uriImg, Uri.parse(resource.toString()).toString()).apply();
+
+                        }
+                    });
+
             /*
             //Wenn kein Bild in den Prefs existiert, dann downloade es vom Server.
             FirebaseStorage localStorage = FirebaseStorage.getInstance();
