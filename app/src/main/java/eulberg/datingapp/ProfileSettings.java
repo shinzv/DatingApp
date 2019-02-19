@@ -68,12 +68,14 @@ public class ProfileSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
-                    databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).removeValue();
-                    databaseReference.child("user_settings").child(mAuth.getCurrentUser().getUid()).removeValue();
                     //Entfernt den User aus der Authentication Liste
                     mAuth.getCurrentUser().delete();
                     mAuth.signOut();
+
+                    storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
+                    databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).removeValue();
+                    databaseReference.child("user_settings").child(mAuth.getCurrentUser().getUid()).removeValue();
+
                     SharedPreferences sharedPreferences = getSharedPreferences("SharedPrefs", MODE_PRIVATE);
                     sharedPreferences.edit().clear().apply();
                     Toast.makeText(getBaseContext(),"Account wurde gelöscht", Toast.LENGTH_LONG).show();

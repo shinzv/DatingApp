@@ -18,6 +18,7 @@ public class MatchedUser {
     public MatchedUser() {
     }
 
+
     /**
      * sondierende Methode
      * @return matchedUserID: gibt die UserId des gematchten Users zurück.

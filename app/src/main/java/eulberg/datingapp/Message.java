@@ -18,6 +18,7 @@ public class Message {
         this.message = message;
     }
 
+
     /**
      * Dieser leere Konstruktor wird für Firebase benötigt
      */
