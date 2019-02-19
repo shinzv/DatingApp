@@ -47,6 +47,11 @@ public class Register extends AppCompatActivity {
     private CircleImageView female;
     private String gender;
 
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState der gespeicherte Status der App
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -74,7 +74,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
      * Initialisierungen usw...
-     * @param savedInstanceState
+     * @param savedInstanceState der gespeicherte Status der App
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

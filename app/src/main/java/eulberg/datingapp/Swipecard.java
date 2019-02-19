@@ -52,6 +52,13 @@ public class Swipecard {
     private SwipePlaceHolderView mSwipeView;
     private String ID;
 
+    /**
+     * Konstruktor
+     * @param context Kontext
+     * @param user userSettings-Instanz
+     * @param ID id des Users
+     * @param swipeView swipeView
+     */
     public Swipecard(Context context, UserSettings user, String ID, SwipePlaceHolderView swipeView) {
         mContext = context;
         this.user = user;
@@ -167,6 +174,9 @@ public class Swipecard {
         });
     }
 
+    /**
+     * initialisiert die Variablen, die mit Firebase in Verbindung stehen.
+     */
     public void fireBaseAuth() {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();

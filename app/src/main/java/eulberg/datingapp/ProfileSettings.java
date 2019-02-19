@@ -36,7 +36,7 @@ public class ProfileSettings extends AppCompatActivity {
     /**
      * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
      * Initialisierungen usw...
-     * @param savedInstanceState
+     * @param savedInstanceState der gespeicherte Status der App
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

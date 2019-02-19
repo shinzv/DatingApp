@@ -32,7 +32,11 @@ public class DisplayProfile extends AppCompatActivity {
 
     private String userID;
 
-
+    /**
+     * Siehe „Lifecyle of Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState der gespeicherte Status der App
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
