@@ -38,6 +38,11 @@ public class Login extends AppCompatActivity {
     private static final String TAG = Login.class.getSimpleName();
     private EditText email, password;
 
+    /**
+     * Siehe „Lifecyle of an Activity“ für den Aufrufszeitraum.
+     * Initialisierungen usw...
+     * @param savedInstanceState der gespeicherte Status der App
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +101,11 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    /**
+     * Lögt den Nutzer ein
+     * @param email -> Email des Nutzers
+     * @param password -> Passwort des Nutzers
+     */
     private void signIn(String email, String password){
         try {
             mAuth.signInWithEmailAndPassword(email, hashPassword(password))
@@ -129,6 +139,12 @@ public class Login extends AppCompatActivity {
         //Hier soll nichts passieren.
     }
 
+    /**
+     * Hasht das Passwort mit MD5
+     * @param password Passwort des Users
+     * @return gibt das Passwort gehasht zurück
+     * @throws NoSuchAlgorithmException -> Fehler, wenn der Algorithmus nicht vorhanden ist
+     */
     public static String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(password.getBytes());
