@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -159,6 +161,7 @@ public class Swipecard {
                         HashMap<String, Object> hashMap2 = new HashMap<>();
                         hashMap2.put("matchedUserID", currentUserID);
                         reference.child("matches").child(ID).push().setValue(hashMap2);
+                        Toast.makeText(mContext, "IHR HABT EIN MATCH!", Toast.LENGTH_SHORT).show();
                     }
 
                 }
