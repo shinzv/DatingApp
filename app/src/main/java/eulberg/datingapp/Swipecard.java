@@ -28,6 +28,8 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Layout(R.layout.swipecard)
@@ -54,11 +56,14 @@ public class Swipecard {
     private SwipePlaceHolderView mSwipeView;
     private String ID;
 
+    private Boolean alreadyMatched;
+
     public Swipecard(Context context, UserSettings user, String ID, SwipePlaceHolderView swipeView) {
         mContext = context;
         this.user = user;
         mSwipeView = swipeView;
         this.ID = ID;
+        alreadyMatched = false;
     }
 
     /**
@@ -147,29 +152,50 @@ public class Swipecard {
      * Überprüft ob der gelikete Nutzer den authentifizierten Nutzer auch in seiner "likes" Node hat,
      * sofern dies der Fall ist werden beide ID's der betroffenen Nutzer in der Node "matches" gespeichert.
      */
+
     public void checkIfMatch(){
-        Query liked = reference.child("likes").child(ID).orderByChild("likedUserID");
-        liked.addValueEventListener(new ValueEventListener() {
+
+        Query matched = reference.child("matches").child(currentUserID).orderByChild("matchedUserID");
+        matched.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    LikedUser likedUser = snapshot.getValue(LikedUser.class);
-                    if(likedUser.getLikedUserID().equals(currentUserID)){
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("matchedUserID", ID);
-                        reference.child("matches").child(currentUserID).push().setValue(hashMap);
-                        HashMap<String, Object> hashMap2 = new HashMap<>();
-                        hashMap2.put("matchedUserID", currentUserID);
-                        reference.child("matches").child(ID).push().setValue(hashMap2);
-                        Toast.makeText(mContext, "IHR HABT EIN MATCH!", Toast.LENGTH_SHORT).show();
-                }
+                    MatchedUser matchedUser = snapshot.getValue(MatchedUser.class);
+                    if(matchedUser.getMatchedUserID().equals(ID)){
+                        alreadyMatched = true;
+                    }
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
+
+        if(!alreadyMatched) {
+            Query liked = reference.child("likes").child(ID).orderByChild("likedUserID");
+            liked.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        LikedUser likedUser = snapshot.getValue(LikedUser.class);
+                        if (likedUser.getLikedUserID().equals(currentUserID)) {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("matchedUserID", ID);
+                            reference.child("matches").child(currentUserID).push().setValue(hashMap);
+                            HashMap<String, Object> hashMap2 = new HashMap<>();
+                            hashMap2.put("matchedUserID", currentUserID);
+                            reference.child("matches").child(ID).push().setValue(hashMap2);
+                            Toast.makeText(mContext, "IHR HABT EIN MATCH!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     /**
