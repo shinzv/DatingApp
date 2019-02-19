@@ -15,10 +15,10 @@ public class UserSettings implements Serializable {
 
     /**
      * Konstruktor
-     * @param age
-     * @param description
-     * @param gender
-     * @param username
+     * @param age alter
+     * @param description Beschreibung
+     * @param gender Geschlecht
+     * @param username Usernamen
      */
     public UserSettings(long age, String description, String gender, String username) {
         this.age = age;
@@ -27,13 +27,16 @@ public class UserSettings implements Serializable {
         this.username = username;
     }
 
+    /**
+     * Dieser leere Konstruktor wird für Firebase benötigt
+     */
     public UserSettings() {
 
     }
 
     /**
      * sondierende Methode
-     * @return age
+     * @return age jetziges Alter
      */
     public long getAge() {
         return age;
@@ -41,14 +44,15 @@ public class UserSettings implements Serializable {
 
     /**
      * verändernde Methode
-     * @param age
+     * @param age neue Alter
      */
     public void setAge(long age) {
         this.age = age;
     }
+
     /**
      * sondierende Methode
-     * @return description
+     * @return description derzeitige Beschreibung
      */
     public String getDescription() {
         return description;
@@ -56,14 +60,15 @@ public class UserSettings implements Serializable {
 
     /**
      * verändernde Methode
-     * @param description
+     * @param description neue Beschreibung
      */
     public void setDescription(String description) {
         this.description = description;
     }
+
     /**
      * sondierende Methode
-     * @return gender
+     * @return gender derzeitiges Geschlecht
      */
     public String getGender() {
         return gender;
@@ -71,14 +76,15 @@ public class UserSettings implements Serializable {
 
     /**
      * verändernde Methode
-     * @param gender
+     * @param gender neues Geschlecht
      */
     public void setGender(String gender) {
         this.gender = gender;
     }
+
     /**
      * sondierende Methode
-     * @return username
+     * @return username derzeitiger username
      */
     public String getUsername() {
         return username;
@@ -86,7 +92,7 @@ public class UserSettings implements Serializable {
 
     /**
      * verändernde Methode
-     * @param username
+     * @param username neuer Benutzername
      */
     public void setUsername(String username) {
         this.username = username;
@@ -101,6 +107,10 @@ public class UserSettings implements Serializable {
     }*/
 
 
+    /**
+     *
+     * @return String, der die Attribute dieser Klasse als einen Text darstellt.
+     */
     @Override
     public String toString() {
         return "UserSettings{" +
@@ -114,7 +124,7 @@ public class UserSettings implements Serializable {
 
     /**
      * sondierende Methode
-     * @return city
+     * @return Stadtnamen
      */
     public String getCity() {
         return city;
@@ -122,7 +132,7 @@ public class UserSettings implements Serializable {
 
     /**
      * verändernde Methode
-      * @param city
+     * @param city neue Stadtname
      */
     public void setCity(String city) {
         this.city = city;

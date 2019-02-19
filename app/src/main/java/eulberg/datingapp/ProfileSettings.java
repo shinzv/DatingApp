@@ -53,12 +53,11 @@ public class ProfileSettings extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FirebaseAuth.getInstance().signOut();
                 SharedPreferences sharedPreferences = getSharedPreferences("SharedPrefs",MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
-                //Lösche das Profilbild in der Storage.
-                storageReference.child("ProfilePictures/" + mAuth.getCurrentUser().getUid()).delete();
-                mAuth.signOut();
+
+
                 startActivity(new Intent(ProfileSettings.this, Login.class));
 
             }

@@ -150,6 +150,8 @@ public class EditProfile extends AppCompatActivity {
         reference.child("users").child(user.getUser_id()).setValue(user);
         reference.child("user_settings").child(user.getUser_id()).setValue(userSettings);
 
+        finish();
+
         /*
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
