@@ -134,6 +134,7 @@
                         android:background="@null"
                         android:hint="About me"
                         android:inputType="textMultiLine"
+                        android:maxLength="100"
                         android:textAlignment="textStart" />
 
                 </RelativeLayout>
