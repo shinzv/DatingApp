@@ -29,6 +29,13 @@
             android:background="@drawable/ic_accept" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/discoverFragmentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Es gibt leider momentan keine Treffer" />
+
     <com.mindorks.placeholderview.SwipePlaceHolderView
         android:id="@+id/swipeView"
         android:layout_width="match_parent"
