@@ -63,7 +63,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
 
     //IronSource
     private final String APP_KEY = "88c7a19d";
-    private boolean stopAds = true;
+    private boolean stopAds = false;
 
     /**
      * Siehe „Lifecyle of an Activity“ für den Aufrufszeitraum.
@@ -169,6 +169,7 @@ public class Home extends AppCompatActivity implements InterstitialListener {
 
             //show the interstitial
             IronSource.loadInterstitial();
+
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
